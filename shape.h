@@ -1,7 +1,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 #include "object.h"
-#include "qgl.h"
+#include "OpenGL/gl.h"
 class Shape:public Object
 {
 public:

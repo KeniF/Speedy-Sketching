@@ -1,6 +1,6 @@
 #ifndef ALGORITHMS_H
 #define ALGORITHMS_H
-#include "Shape.h"
+#include "shape.h"
 #include "circle.h"
 #include "line.h"
 #include "strokes.h"

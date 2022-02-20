@@ -1,6 +1,6 @@
 #ifndef LINE_H
 #define LINE_H
-#include <Point.h>
+#include <point.h>
 #include <shape.h>
 #include <string>
 #include <iostream>

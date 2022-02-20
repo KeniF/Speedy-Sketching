@@ -4,8 +4,9 @@
 #include "mainwindow.h"
 #include <cmath>
 #include "algorithms.h"
-#include <Vector>
+#include <vector>
 #include <QTimer>
+#include "OpenGL/glu.h"
 
 using namespace std;
 
@@ -15,9 +16,9 @@ static const GLuint sliceInCircle=70, BUFFER_SIZE=2048;
 static const GLfloat zoomInterval=0.2f, panelMoveInterval=0.05f,panelDistance=-30.0f;
 static const GLfloat freehandWidth=3.0f, SCANSIZE=18.0f;
 
-Display::Display(QWidget *parent, int mode):QGLWidget(parent){
+Display::Display(QWidget *parent, int mode):QOpenGLWidget(parent){
     this->mode=mode;
-    setMouseTracking(true);
+    //setMouseTracking(true);
     leftMousePressed=false;
     rightMousePressed=false;
     drawBase=true;
@@ -43,7 +44,7 @@ void Display::initializeValues(){
     originalRotateX=0;
     originalRotateY=0;
     selectedObject=-1;
-    updateGL();
+    update();
 }
 
 Display::~Display(){
@@ -196,7 +197,7 @@ void Display::mousePressEvent(QMouseEvent *event){
             if((result=selection())>-1){
                 pScene->removeObject(result);
                 selectedObject=-1;
-                updateGL();
+                update();
             }
         }
         else if(mode==MainWindow::mode_push_pull){
@@ -204,7 +205,7 @@ void Display::mousePressEvent(QMouseEvent *event){
             int result;
             if((result=selection())>-1){
                selectedObject=result;
-               updateGL();
+               update();
                extrudedShape=pScene->getShape(result);
                pExtrudeFrom=new Point(windowToSceneW(event->x()),windowToSceneH(event->y()),0);
            }
@@ -220,8 +221,6 @@ void Display::mousePressEvent(QMouseEvent *event){
             pDragFrom=new Point(windowToSceneW(event->x()),windowToSceneH(event->y()),0.0f);//z is panel depth
         }
     }//right mouse
-    else if(event->button()==Qt::MidButton){
-    }
 }//mouse press event
 
 void Display::mouseMoveEvent(QMouseEvent *event){
@@ -235,14 +234,14 @@ void Display::mouseMoveEvent(QMouseEvent *event){
             Point* p=new Point(windowToSceneW(event->x()),windowToSceneH(event->y()),drawTranslateZ);
             pCurrentStrokes->getTailLine()->addPoint(p);
             //cout<<p->toString()<<"\n"<<event->x()<<" "<<event->y()<<endl;
-            updateGL();
+            update();
         }
         else if(mode==MainWindow::mode_push_pull&&extrudedShape){
             GLfloat height=extrudedShape->getHeight();
             height+=(windowToSceneW(event->x())-pExtrudeFrom->getX());
             if (height<0.0f) height=0.0f;
             extrudedShape->setHeight(height);
-            updateGL();
+            update();
             delete pExtrudeFrom; pExtrudeFrom=0;
             pExtrudeFrom=new Point(windowToSceneW(event->x()),windowToSceneH(event->y()),0);
         }
@@ -250,13 +249,13 @@ void Display::mouseMoveEvent(QMouseEvent *event){
     else if(rightMousePressed){
         drawTranslateX+=windowToSceneW(event->x())-pDragFrom->getX();
         drawTranslateY+=windowToSceneH(event->y())-pDragFrom->getY();
-        updateGL();
+        update();
     }
     else if(!isInDrawPanel()&&isDrawMode()){
         shapeDetection(true);
     }
     else if(!panelMoving){
-        updateGL();
+        update();
     }
 }//mouseMoveEvent
 
@@ -335,11 +334,6 @@ void Display::shapeDetection(bool userTriggered){
                 pScene->addObject(pCircle);
                 pCurrentStrokes=0;
             break;
-
-            case MainWindow::mode_push_pull:
-
-            break;
-            default: break;
         }//switch
     }//useful line
     else{
@@ -347,7 +341,7 @@ void Display::shapeDetection(bool userTriggered){
             delete pCurrentStrokes;
         pCurrentStrokes=0;
     }
-    updateGL();
+    update();
 }
 
 void Display::mouseReleaseEvent(QMouseEvent *event){
@@ -618,19 +612,19 @@ void Display::drawDrawPanel(){
 void Display::drawText(){
     glViewport(0,0,(GLsizei)width,(GLsizei)height);
     glColor3f(0.0,0.0,0.6);
-    renderText(0,12,"<Viewer>",QFont( "Helvetica", 10, QFont::Bold,false),0);
+    //renderText(0,12,"<Viewer>",QFont( "Helvetica", 10, QFont::Bold,false),0);
     ostringstream stream1;
     stream1<<"Panel depth:"<<drawTranslateZ;
-    renderText((GLsizei)(width/3.0f+1),12,"<Drawing Panel> Move cursor to Viewer or right-click for quick detection",QFont( "Helvetica", 10, QFont::Bold,false),0);
-    renderText((GLsizei)(width-110.0f),(GLsizei)(height-8),stream1.str().c_str(),QFont( "Helvetica", 10, QFont::Bold,false),0);
+    //renderText((GLsizei)(width/3.0f+1),12,"<Drawing Panel> Move cursor to Viewer or right-click for quick detection",QFont( "Helvetica", 10, QFont::Bold,false),0);
+    //renderText((GLsizei)(width-110.0f),(GLsizei)(height-8),stream1.str().c_str(),QFont( "Helvetica", 10, QFont::Bold,false),0);
     if(pCurrentStrokes){
         ostringstream stream;
         stream<<pCurrentStrokes->getTailLine()->getTotalPoints()<<" points in line";
-        renderText((GLsizei)(width/3.0f+1),24,stream.str().c_str(),QFont( "Helvetica", 10, QFont::Bold,false),0);
+        //renderText((GLsizei)(width/3.0f+1),24,stream.str().c_str(),QFont( "Helvetica", 10, QFont::Bold,false),0);
     }
     //Red warning text
     glColor3f(0.9,0.0,0.0);
-    renderText((GLsizei)(width/3.0f+1),(GLsizei)height-8,statusString.c_str(),QFont( "Helvetica", 10, QFont::Bold,false),0);
+    //renderText((GLsizei)(width/3.0f+1),(GLsizei)height-8,statusString.c_str(),QFont( "Helvetica", 10, QFont::Bold,false),0);
 }//drawText
 
 GLfloat Display::windowToSceneH(int input){
@@ -672,7 +666,7 @@ void Display::clearScene(){
         pLastStrokes=0;
     }
     initializeValues();
-    updateGL();
+    update();
 }
 
 void Display::resizeGL(int width, int height){
@@ -707,7 +701,7 @@ void Display::xRotation(int deg){
     if(deg!=0){
         drawRotateX=originalRotateX+deg;
         //rotatingX=true;
-        updateGL();
+        update();
     }
     else originalRotateX=drawRotateX;
 }
@@ -716,7 +710,7 @@ void Display::yRotation(int deg){
     if(deg!=0){
         drawRotateY=originalRotateY+deg;
         //rotatingX=false;
-        updateGL();
+        update();
     }
     else originalRotateY=drawRotateY;
 }
@@ -725,13 +719,13 @@ void Display::zoomIn(){
     statusString="";
     if(drawPanelZoom>zoomInterval+0.1f) drawPanelZoom-=zoomInterval;
     else statusString="Unable to zoom in anymore!";
-    updateGL();
+    update();
 }
 
 void Display::zoomOut(){
     statusString="";
     drawPanelZoom+=zoomInterval;
-    updateGL();
+    update();
 }
 
 bool Display::isInDrawPanel(){
@@ -744,7 +738,7 @@ void Display::panelIn(){
     //statusString="";
     panelMoving=true;
     drawTranslateZ-=panelMoveInterval;
-    updateGL();
+    update();
 }
 
 void Display::panelOut(){
@@ -753,12 +747,12 @@ void Display::panelOut(){
     if(drawTranslateZ+panelMoveInterval<abs(panelDistance)-2.0f)
         drawTranslateZ+=panelMoveInterval;
     else statusString="Draw panel too close to camera!";
-    updateGL();
+    update();
 }
 
 void Display::panelMoveStopped(){
     panelMoving=false;
-    //updateGL();
+    //update();
 }
 
 void Display::undo(){
@@ -768,7 +762,7 @@ void Display::undo(){
         pCurrentStrokes=0;
     }
     else pScene->removeLast();
-    updateGL();
+    update();
 }
 
 void Display::changeCursor(){

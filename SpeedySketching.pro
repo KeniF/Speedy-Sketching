@@ -1,8 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2009-06-23T14:12:15
 # -------------------------------------------------
-QT += opengl \
-    xml
+QT += widgets core gui opengl
 TARGET = SpeedySketching
 TEMPLATE = app
 SOURCES += main.cpp \

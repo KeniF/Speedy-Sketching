@@ -1,6 +1,6 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include "line.h"
 #include "strokes.h"
 #include "scene.h"
@@ -13,9 +13,10 @@
 #include "cone.h"
 #include <string>
 #include <sstream>
+#include "OpenGL/glu.h"
 /* Display is an implementation of OpenGL*/
 
-class Display : public QGLWidget
+class Display : public QOpenGLWidget
 {
     Q_OBJECT
 public:
@@ -31,7 +32,7 @@ public:
     void modeChanged(int mode);
     void panelMoveStopped();
     void undo();
-    void enableDrawPanel(bool in){drawPanelEnabled=in; updateGL();}
+    void enableDrawPanel(bool in){drawPanelEnabled=in; }
     void initializeValues();
     void enableBase(bool in){drawBase=in;}
 

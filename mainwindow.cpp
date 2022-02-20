@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     display=new Display(this,MainWindow::mode_circle);
     display->setCursor(Qt::CrossCursor);
-    ui->gridLayout->addWidget(display,0,0,1,1,0); //OpenGL window
+    ui->gridLayout->addWidget(display,0,0,1,1); //OpenGL window
     //Set action group so only one can be pressed at a time
     actionGroup=new QActionGroup(this);
     actionGroup->addAction(ui->actionCircle);

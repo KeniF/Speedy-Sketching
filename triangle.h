@@ -1,7 +1,7 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
-#include "Point.h"
-#include "Shape.h"
+#include "point.h"
+#include "shape.h"
 
 class Triangle: public Shape{
 public:

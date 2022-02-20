@@ -1,6 +1,6 @@
 #ifndef SCENE_H
 #define SCENE_H
-#include <Vector>
+#include <vector>
 #include <object.h>
 #include <shape.h>
 using namespace std;

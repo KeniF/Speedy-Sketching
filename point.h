@@ -1,6 +1,6 @@
 #ifndef POINT_H
 #define POINT_H
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <string>
 #include <sstream>
 
@@ -15,9 +15,9 @@ public:
     Point * getNext(Point *next){ return this->next;}
     Point * getLast(Point *last){return this->last;}
     void setLast(Point *last){this->last=last;}
-    GLfloat Point::getX() const {return x;}
-    GLfloat Point::getY() const {return y;}
-    GLfloat Point::getZ() const {return z;}
+    GLfloat getX() const {return x;}
+    GLfloat getY() const {return y;}
+    GLfloat getZ() const {return z;}
     Point* next, * last;
     string toString();
 private:
