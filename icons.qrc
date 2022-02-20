@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>icons/circle.png</file>
+        <file>icons/copy.png</file>
+        <file>icons/cut.png</file>
+        <file>icons/filenew.png</file>
+        <file>icons/fileopen.png</file>
+        <file>icons/filesave.png</file>
+        <file>icons/help.png</file>
+        <file>icons/paste.png</file>
+        <file>icons/rectangle.png</file>
+        <file>icons/redo.png</file>
+        <file>icons/triangle.png</file>
+        <file>icons/undo.png</file>
+        <file>icons/zoomin.png</file>
+        <file>icons/zoomout.png</file>
+        <file>icons/downarrow.png</file>
+        <file>icons/uparrow.png</file>
+        <file>icons/remove.png</file>
+        <file>icons/freehand.png</file>
+        <file>icons/sphere.png</file>
+        <file>icons/cone.png</file>
+        <file>icons/cylinder_d.png</file>
+        <file>icons/cylinder_t.png</file>
+        <file>icons/extrusion.png</file>
+    </qresource>
+</RCC>

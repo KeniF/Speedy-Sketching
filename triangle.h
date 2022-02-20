@@ -1,0 +1,18 @@
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
+#include "Point.h"
+#include "Shape.h"
+
+class Triangle: public Shape{
+public:
+    Triangle(Point * p1, Point * p2, Point * p3,GLfloat xRotation, GLfloat yRotation, GLfloat zRotation);
+    virtual ~Triangle();
+    virtual int getType(){return type;}
+    Point * getP1(){return pPoint1;}
+    Point * getP2(){return pPoint2;}
+    Point * getP3(){return pPoint3;}
+private:
+    Point * pPoint1, * pPoint2, * pPoint3;
+};
+
+#endif // TRIANGLE_H
