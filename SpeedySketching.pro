@@ -4,6 +4,7 @@
 QT += widgets core gui opengl
 TARGET = SpeedySketching
 TEMPLATE = app
+DESTDIR = ./build
 SOURCES += main.cpp \
     mainwindow.cpp \
     display.cpp \

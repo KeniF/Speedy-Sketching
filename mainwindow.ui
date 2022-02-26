@@ -26,7 +26,7 @@
    <enum>Qt::NoContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string>Speedy Sketching beta 1.1 | Kenneth Pak-Kiu Lam (2009)</string>
+   <string>Speedy Sketching (2009)</string>
   </property>
   <property name="tabShape">
    <enum>QTabWidget::Rounded</enum>
@@ -53,7 +53,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="icons.qrc">
+         <iconset>
           <normaloff>:/icons/zoomout.png</normaloff>:/icons/zoomout.png</iconset>
         </property>
         <property name="iconSize">
@@ -94,7 +94,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="icons.qrc">
+         <iconset>
           <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
         </property>
         <property name="iconSize">
@@ -129,7 +129,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="icons.qrc">
+         <iconset>
           <normaloff>:/icons/zoomin.png</normaloff>:/icons/zoomin.png</iconset>
         </property>
         <property name="iconSize">
@@ -182,7 +182,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="icons.qrc">
+         <iconset>
           <normaloff>:/icons/uparrow.png</normaloff>:/icons/uparrow.png</iconset>
         </property>
         <property name="iconSize">
@@ -348,7 +348,6 @@
         <property name="font">
          <font>
           <pointsize>11</pointsize>
-          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -508,7 +507,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/circle.png</normaloff>:/icons/circle.png</iconset>
    </property>
    <property name="text">
@@ -526,7 +525,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/triangle.png</normaloff>:/icons/triangle.png</iconset>
    </property>
    <property name="text">
@@ -663,7 +662,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/freehand.png</normaloff>:/icons/freehand.png</iconset>
    </property>
    <property name="text">
@@ -681,7 +680,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/sphere.png</normaloff>:/icons/sphere.png</iconset>
    </property>
    <property name="text">
@@ -707,7 +706,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/cone.png</normaloff>:/icons/cone.png</iconset>
    </property>
    <property name="text">
@@ -722,7 +721,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/cylinder_t.png</normaloff>:/icons/cylinder_t.png</iconset>
    </property>
    <property name="text">
@@ -737,7 +736,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/cylinder_d.png</normaloff>:/icons/cylinder_d.png</iconset>
    </property>
    <property name="text">
@@ -752,7 +751,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/extrusion.png</normaloff>:/icons/extrusion.png</iconset>
    </property>
    <property name="text">
@@ -777,7 +776,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icons.qrc">
+    <iconset>
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -792,9 +791,7 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="icons.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>verticalSlider</sender>
