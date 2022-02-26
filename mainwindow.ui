@@ -889,38 +889,6 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>horizontalSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>label</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>398</x>
-     <y>569</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>398</x>
-     <y>530</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>verticalSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>label</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>809</x>
-     <y>277</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>398</x>
-     <y>530</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
  <slots>
   <slot>xRotation(int)</slot>

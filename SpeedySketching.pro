@@ -1,10 +1,11 @@
 # -------------------------------------------------
 # Project created by QtCreator 2009-06-23T14:12:15
 # -------------------------------------------------
-QT += widgets core gui opengl
+QT += openglwidgets widgets core gui opengl
 TARGET = SpeedySketching
 TEMPLATE = app
 DESTDIR = ./build
+CONFIG += Console
 SOURCES += main.cpp \
     mainwindow.cpp \
     display.cpp \

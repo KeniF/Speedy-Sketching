@@ -12,12 +12,13 @@ using namespace std;
 
 static const GLfloat fov=45.0f,nearPoint=0.1f, farPoint=200.0f;//nearPoint =0.0f will fail it :(
 static const GLfloat strokeWidth=1.1f, lineDistance=-0.1f;
-static const GLuint sliceInCircle=70, BUFFER_SIZE=2048;
+static const GLuint sliceInCircle=100, BUFFER_SIZE=2048;
 static const GLfloat zoomInterval=0.2f, panelMoveInterval=0.05f,panelDistance=-30.0f;
 static const GLfloat freehandWidth=3.0f, SCANSIZE=18.0f;
 
-Display::Display(QWidget *parent, int mode):QOpenGLWidget(parent){
+Display::Display(QMainWindow *parent, int mode):QOpenGLWidget(parent){
     this->mode=mode;
+    this->parent = parent;
     setMouseTracking(true);
     leftMousePressed=false;
     rightMousePressed=false;
@@ -90,7 +91,7 @@ void Display::paintGL(){
     glClear (GL_DEPTH_BUFFER_BIT);
     drawScene(false);
     drawMidLine();
-    drawText();
+    //drawText();
 }//paintGL (repaint)
 
 void Display::drawScene(bool drawPanel){
@@ -609,23 +610,23 @@ void Display::drawDrawPanel(){
     glDepthMask(GL_TRUE);
 }
 
-void Display::drawText(){
-    glViewport(0,0,(GLsizei)width,(GLsizei)height);
-    glColor3f(0.0,0.0,0.6);
-    //renderText(0,12,"<Viewer>",QFont( "Helvetica", 10, QFont::Bold,false),0);
-    ostringstream stream1;
-    stream1<<"Panel depth:"<<drawTranslateZ;
-    //renderText((GLsizei)(width/3.0f+1),12,"<Drawing Panel> Move cursor to Viewer or right-click for quick detection",QFont( "Helvetica", 10, QFont::Bold,false),0);
-    //renderText((GLsizei)(width-110.0f),(GLsizei)(height-8),stream1.str().c_str(),QFont( "Helvetica", 10, QFont::Bold,false),0);
-    if(pCurrentStrokes){
-        ostringstream stream;
-        stream<<pCurrentStrokes->getTailLine()->getTotalPoints()<<" points in line";
-        //renderText((GLsizei)(width/3.0f+1),24,stream.str().c_str(),QFont( "Helvetica", 10, QFont::Bold,false),0);
-    }
-    //Red warning text
-    glColor3f(0.9,0.0,0.0);
-    //renderText((GLsizei)(width/3.0f+1),(GLsizei)height-8,statusString.c_str(),QFont( "Helvetica", 10, QFont::Bold,false),0);
-}//drawText
+//void Display::drawText(){
+//    glViewport(0,0,(GLsizei)width,(GLsizei)height);
+//    glColor3f(0.0,0.0,0.6);
+//    renderText(0,12,"<Viewer>",QFont( "Helvetica", 10, QFont::Bold,false));
+//    ostringstream stream1;
+//    stream1<<"Panel depth:"<<drawTranslateZ;
+//    renderText((GLsizei)(width/3.0f+1),12,"<Drawing Panel> Move cursor to Viewer or right-click for quick detection",QFont( "Helvetica", 10, QFont::Bold,false));
+//    renderText((GLsizei)(width-110.0f),(GLsizei)(height-8),stream1.str().c_str(),QFont( "Helvetica", 10, QFont::Bold,false));
+//    if(pCurrentStrokes){
+//        ostringstream stream;
+//        stream<<pCurrentStrokes->getTailLine()->getTotalPoints()<<" points in line";
+//        renderText((GLsizei)(width/3.0f+1),24,stream.str().c_str(),QFont( "Helvetica", 10, QFont::Bold,false));
+//    }
+//    //Red warning text
+//    glColor3f(0.9,0.0,0.0);
+//    renderText((GLsizei)(width/3.0f+1),(GLsizei)height-8,statusString.c_str(),QFont( "Helvetica", 10, QFont::Bold,false));
+//}
 
 GLfloat Display::windowToSceneH(int input){
       return (GLfloat)((GLfloat)input-height/2.0)/(height/2.0)*(panelHalfSpanH/-1.0f)-drawTranslateY;
@@ -671,9 +672,9 @@ void Display::clearScene(){
 
 void Display::resizeGL(int width, int height){
     if (height==0) height=1;//prevents zero division
-    if(width==0) width=1;
-    this->width=width;
-    this->height=height;
+    if (width==0) width=1;
+    this->width = width * parent->devicePixelRatio();
+    this->height = height * parent->devicePixelRatio();
 }
 
 void Display::modeChanged(int mode){

@@ -1,6 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 #include <QOpenGLWidget>
+#include <QMainWindow>
 #include "line.h"
 #include "strokes.h"
 #include "scene.h"
@@ -20,7 +21,7 @@ class Display : public QOpenGLWidget
 {
     Q_OBJECT
 public:
-    Display(QWidget *parent, int mode);
+    Display(QMainWindow *parent, int mode);
     ~Display();
     void zoomIn();
     void zoomOut();
@@ -58,6 +59,7 @@ private:
     GLUquadricObj *quadric;
     //Vec3f vec, origin;
     Shape* extrudedShape; //store shape being extruded
+    QMainWindow* parent;
 
     void drawDrawPanel();
     void drawScene(bool drawPanel);
