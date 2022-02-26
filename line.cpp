@@ -22,7 +22,7 @@ Line::Line(const Line & rhs){
     Point * to=pHead;
     Point * tail=pHead;
     totalPoints=rhs.totalPoints;
-    while(from=from->next){
+    while((from=from->next)){
         to=new Point(*from);
         tail->next=to;
         to->last=tail;
@@ -61,6 +61,6 @@ string Line::toString(){
     Point * iterator=this->getHeadPoint();
     do{
         stream<<iterator->toString();
-    }while(iterator=iterator->next);
+    }while((iterator=iterator->next));
     return stream.str();
 }
