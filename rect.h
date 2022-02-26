@@ -2,6 +2,7 @@
 #define RECT_H
 #include "shape.h"
 #include "point.h"
+#include "OpenGL/glu.h"
 
 using namespace std;
 class Rect: public Shape
@@ -12,6 +13,7 @@ public:
     Point * getCentre(){return centre;}
     GLfloat getWidth(){return width;}
     GLfloat getLength(){return length;}
+    void draw(GLUquadricObj *quadric, bool selected);
 private:
     Point * centre;
     GLfloat width, length;

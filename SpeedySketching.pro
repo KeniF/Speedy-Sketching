@@ -13,7 +13,6 @@ SOURCES += main.cpp \
     point.cpp \
     algorithms.cpp \
     scene.cpp \
-    object.cpp \
     shape.cpp \
     circle.cpp \
     strokes.cpp \

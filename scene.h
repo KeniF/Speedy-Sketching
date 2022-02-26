@@ -1,20 +1,19 @@
 #ifndef SCENE_H
 #define SCENE_H
 #include <vector>
-#include <object.h>
 #include <shape.h>
 using namespace std;
 class Scene{
 public:
     Scene();
-    void addObject(Object * obj);
+    void addObject(Shape * obj);
     void removeObject(int index);
     void removeLast();
     void clear();
     Shape* getShape(int index);
-    vector<Object*> getAll();
+    vector<Shape*> getAll();
 private:
-    vector<Object*> v;
+    vector<Shape*> v;
 };
 
 #endif // SCENE_H

@@ -2,6 +2,7 @@
 #define CIRCLE_H
 #include "shape.h"
 #include "point.h"
+#include "OpenGL/glu.h"
 
 class Circle:public Shape
 {
@@ -13,9 +14,12 @@ public:
     void setRadius(GLfloat in){radius=in;}
     void setCentre(Point * in){centre=in;}
     virtual string toString();
-private:
+    void draw(GLUquadricObj * quadric, bool selected);
+protected:
     Point * centre;
     GLfloat radius;
+private:
+    static const GLuint noOfSlices = 200;
 };
 
 #endif // CIRCLE_H

@@ -22,6 +22,7 @@ public:
     GLfloat getMinY(){ return minY;}
     GLfloat getMaxY(){return maxY;}
     Line * next;
+    void draw(GLUquadricObj * quadric, bool selected);
 private:
     Point * pHead, * pTail;
     int totalPoints;

@@ -2,6 +2,7 @@
 #define CYLINDER_H
 #include "shape.h"
 #include "point.h"
+#include "OpenGL/glu.h"
 
 class Cylinder: public Shape
 {
@@ -13,10 +14,12 @@ public:
     GLfloat getLength(){return length;}
     bool isTube(){return tube;}
     bool drawBase(){return hasBase;}
+    void draw(GLUquadricObj * quadric, bool selected);
 private:
     Point * centre;
     GLfloat width, length;
     bool tube, hasBase;
+    static const GLuint sliceInCircle = 200;
 };
 
 #endif // CYLINDER_H

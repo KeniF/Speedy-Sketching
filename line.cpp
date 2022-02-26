@@ -64,3 +64,7 @@ string Line::toString(){
     }while((iterator=iterator->next));
     return stream.str();
 }
+
+void Line::draw(GLUquadricObj * quadric, bool selected) {
+
+}

@@ -4,7 +4,7 @@ using namespace std;
 Scene::Scene(){
 }
 
-void Scene::addObject(Object*obj){
+void Scene::addObject(Shape*obj){
     if(obj) v.push_back(obj);
 }
 
@@ -29,6 +29,6 @@ void Scene::clear(){
     v.clear();
 }
 
-vector<Object*> Scene::getAll(){
+vector<Shape*> Scene::getAll(){
     return v;
 }

@@ -7,6 +7,7 @@
 #include <vector>
 #include <QTimer>
 #include "OpenGL/glu.h"
+#include "shape.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ static const GLfloat fov=45.0f,nearPoint=0.1f, farPoint=200.0f;//nearPoint =0.0f
 static const GLfloat strokeWidth=1.1f, lineDistance=-0.1f;
 static const GLuint sliceInCircle=100, BUFFER_SIZE=2048;
 static const GLfloat zoomInterval=0.2f, panelMoveInterval=0.05f,panelDistance=-30.0f;
-static const GLfloat freehandWidth=3.0f, SCANSIZE=18.0f;
+static const GLfloat SCANSIZE=18.0f;
 
 Display::Display(QMainWindow *parent, int mode):QOpenGLWidget(parent){
     this->mode=mode;
@@ -130,53 +131,14 @@ void Display::drawScene(bool drawPanel){
         drawStrokes(pLastStrokes);
         glPopMatrix();
     }
-    vector<Object*> sceneObjects=pScene->getAll();
+    vector<Shape*> sceneObjects = pScene->getAll();
     for(int i=sceneObjects.size()-1;i>=0;i--){
         glPushMatrix();
-        Object * temp=sceneObjects[i];
+        Shape * temp = sceneObjects[i];
         glLoadName(i);//needed for picking
-        switch(temp->getType()){
-            case(Object::CIRCLE):
-                if(i==selectedObject) glColor4f(1.0,0.4,0.4,1.0);
-                else glColor4f(0.9,0.0,0.0,1.0);
-                drawCircle(static_cast<Circle*>(temp));
-            break;
-            case(Object::TRIANGLE):
-                 if(i==selectedObject) glColor4f(0.3,0.9,0.3,1.0);
-                 else glColor4f(0,0.7,0,1.0);
-                drawTriangle(static_cast<Triangle*>(temp));
-            break;
-            case(Object::FREEHAND):
-                if(i==selectedObject) glColor4f(0.1,0.1,0.8,1.0);
-                else glColor4f(0,0.0,0.4,1.0);
-                drawFreehand(static_cast<Freehand*>(temp));
-            break;
-            case(Object::SPHERE):
-                if(i==selectedObject) glColor4f(0.6,0.6,0.9,1.0);
-                else glColor4f(0.5,0.5,0.8,1.0);
-                drawSphere(static_cast<Sphere*>(temp));
-            break;
-            case(Object::RECTANGLE):
-                if(i==selectedObject) glColor4f(0.95,0.95,0.2,1.0);
-                else glColor4f(0.85,0.85,0.2,1.0);
-                drawRectangle(static_cast<Rect*>(temp));
-            break;
-            case(Object::CYLINDER):
-                if(i==selectedObject) glColor4f(1.0f,0.7,0.1,1.0);
-                else glColor4f(1.0f,0.5,0.1,1.0);
-                drawCylinder(static_cast<Cylinder*>(temp));
-            break;
-            case(Object::CONE):
-                if(i==selectedObject) glColor4f(0.8f,0.0,0.8,1.0);
-                else glColor4f(0.7,0,0.7,1.0);
-                drawCone(static_cast<Cone*>(temp));
-            break;
-
-            default: break;
-
-        }//switch
+        temp->draw(quadric, i == selectedObject);
         glPopMatrix();
-    }//for (go through vector of scene objects
+    }
     if(drawPanelEnabled&&drawPanel&&mode!=MainWindow::mode_delete) drawDrawPanel();
 }//drawScene
 
@@ -358,7 +320,7 @@ void Display::mouseReleaseEvent(QMouseEvent *event){
         changeCursor();
         rightMousePressed=false;
         delete pDragFrom;
-        pDragFrom=0;\
+        pDragFrom=0;
     }
 }//mouse release event
 
@@ -462,129 +424,6 @@ void Display::drawCylinder(Cylinder * cylinder){
         }
         gluCylinder(quadric,cylinder->getLength()/2.0f,cylinder->getLength()/2.0f,cylinder->getWidth(),sliceInCircle,sliceInCircle);
     }
-}
-
-void Display::drawRectangle(Rect *rect){
-    glRotatef(rect->getXRotation(),1.0,0.0,0.0);
-    glRotatef(rect->getYRotation(),0.0,1.0,0.0);
-    glTranslatef(rect->getCentre()->getX(),rect->getCentre()->getY(),rect->getCentre()->getZ());
-    glRotatef(rect->getZRotation(),0,0,1.0f);
-    if(rect->getHeight()==0.0f){
-        glBegin(GL_QUADS);
-            glVertex3f(-0.5f*rect->getLength(),0.5f*rect->getWidth(),0);
-            glVertex3f(-0.5f*rect->getLength(),-0.5f*rect->getWidth(),0);
-            glVertex3f(0.5f*rect->getLength(),-0.5f*rect->getWidth(),0);
-            glVertex3f(0.5f*rect->getLength(),0.5f*rect->getWidth(),0);
-        glEnd();
-    }
-    else{
-        glBegin(GL_QUADS);
-            //bottom
-            glVertex3f(-0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(-0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            //side1
-            glVertex3f(-0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(-0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(-0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            glVertex3f(-0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            //side2
-            glVertex3f(0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            glVertex3f(0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            //side3
-            glVertex3f(-0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            glVertex3f(-0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            //side4
-            glVertex3f(-0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/2.0f);
-            glVertex3f(0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            glVertex3f(-0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            //top
-            glVertex3f(-0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            glVertex3f(-0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            glVertex3f(0.5f*rect->getLength(),-0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-            glVertex3f(0.5f*rect->getLength(),0.5f*rect->getWidth(),rect->getHeight()/-2.0f);
-        glEnd();
-    }
-}
-
-void Display::drawCircle(Circle * circle){
-    //glTranslatef(-1.0f*drawTranslateX,-1.0f*drawTranslateY,0.0);
-    glRotatef(circle->getXRotation(),1.0,0.0,0.0);
-    glRotatef(circle->getYRotation(),0.0,1.0,0.0);
-    //glTranslatef(drawTranslateX,drawTranslateY,0.0);
-    glTranslatef(circle->getCentre()->getX(),circle->getCentre()->getY(),circle->getCentre()->getZ());
-    gluDisk(quadric,0,circle->getRadius(),sliceInCircle,1);
-}
-
-void Display::drawSphere(Sphere * sph){
-    gluQuadricNormals(quadric,GLU_NONE);
-    gluQuadricDrawStyle(quadric,GLU_FILL);
-    glRotatef(sph->getXRotation(),1.0,0.0,0.0);
-    glRotatef(sph->getYRotation(),0.0,1.0,0.0);
-    glTranslatef(sph->getCentre()->getX(),sph->getCentre()->getY(),sph->getCentre()->getZ());
-    //glEnable(GL_CULL_FACE);
-    gluSphere(quadric,sph->getRadius(),sliceInCircle,sliceInCircle);
-    //glDisable(GL_CULL_FACE);
-}
-
-void Display::drawTriangle(Triangle * tri){
-    glRotatef(tri->getXRotation(),1.0,0.0,0.0);
-    glRotatef(tri->getYRotation(),0.0,1.0,0.0);
-    if(tri->getHeight()==0.0f){
-        glBegin(GL_POLYGON);
-            glVertex3f(tri->getP1()->getX(),tri->getP1()->getY(),tri->getP1()->getZ());
-            glVertex3f(tri->getP2()->getX(),tri->getP2()->getY(),tri->getP2()->getZ());
-            glVertex3f(tri->getP3()->getX(),tri->getP3()->getY(),tri->getP3()->getZ());
-        glEnd();
-    }
-    else{
-        glBegin(GL_POLYGON);
-            glVertex3f(tri->getP1()->getX(),tri->getP1()->getY(),tri->getP1()->getZ()-tri->getHeight()/2.0f);
-            glVertex3f(tri->getP2()->getX(),tri->getP2()->getY(),tri->getP2()->getZ()-tri->getHeight()/2.0f);
-            glVertex3f(tri->getP3()->getX(),tri->getP3()->getY(),tri->getP3()->getZ()-tri->getHeight()/2.0f);
-        glEnd();
-        glBegin(GL_QUADS);
-            //side a
-            glVertex3f(tri->getP1()->getX(),tri->getP1()->getY(),tri->getP1()->getZ()-tri->getHeight()/2.0f);
-            glVertex3f(tri->getP2()->getX(),tri->getP2()->getY(),tri->getP2()->getZ()-tri->getHeight()/2.0f);
-            glVertex3f(tri->getP2()->getX(),tri->getP2()->getY(),tri->getP2()->getZ()+tri->getHeight()/2.0f);
-            glVertex3f(tri->getP1()->getX(),tri->getP1()->getY(),tri->getP1()->getZ()+tri->getHeight()/2.0f);
-            //side b
-            glVertex3f(tri->getP2()->getX(),tri->getP2()->getY(),tri->getP2()->getZ()-tri->getHeight()/2.0f);
-            glVertex3f(tri->getP3()->getX(),tri->getP3()->getY(),tri->getP3()->getZ()-tri->getHeight()/2.0f);
-            glVertex3f(tri->getP3()->getX(),tri->getP3()->getY(),tri->getP3()->getZ()+tri->getHeight()/2.0f);
-            glVertex3f(tri->getP2()->getX(),tri->getP2()->getY(),tri->getP2()->getZ()+tri->getHeight()/2.0f);
-            //side c
-            glVertex3f(tri->getP1()->getX(),tri->getP1()->getY(),tri->getP1()->getZ()-tri->getHeight()/2.0f);
-            glVertex3f(tri->getP3()->getX(),tri->getP3()->getY(),tri->getP3()->getZ()-tri->getHeight()/2.0f);
-            glVertex3f(tri->getP3()->getX(),tri->getP3()->getY(),tri->getP3()->getZ()+tri->getHeight()/2.0f);
-            glVertex3f(tri->getP1()->getX(),tri->getP1()->getY(),tri->getP1()->getZ()+tri->getHeight()/2.0f);
-        glEnd();
-        glBegin(GL_POLYGON);
-            glVertex3f(tri->getP1()->getX(),tri->getP1()->getY(),tri->getP1()->getZ()+tri->getHeight()/2.0f);
-            glVertex3f(tri->getP2()->getX(),tri->getP2()->getY(),tri->getP2()->getZ()+tri->getHeight()/2.0f);
-            glVertex3f(tri->getP3()->getX(),tri->getP3()->getY(),tri->getP3()->getZ()+tri->getHeight()/2.0f);
-        glEnd();
-    }
-}
-
-void Display::drawFreehand(Freehand *free){
-    glRotatef(free->getXRotation(),1.0,0.0,0.0);
-    glRotatef(free->getYRotation(),0.0,1.0,0.0);
-    Line * line=free->getLine();
-    glLineWidth(freehandWidth);
-    glBegin(GL_LINE_STRIP);
-    Point * tempPt=line->getHeadPoint();
-        do{
-            glVertex3f(tempPt->getX(),tempPt->getY(),tempPt->getZ());
-        }while( (tempPt=tempPt->next)!=0);
-    glEnd();
 }
 
 void Display::drawDrawPanel(){

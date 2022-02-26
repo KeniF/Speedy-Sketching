@@ -28,7 +28,6 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.ui
-        object.cpp
         point.cpp
         rect.cpp
         scene.cpp
