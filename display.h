@@ -32,7 +32,7 @@ public:
     void modeChanged(int mode);
     void panelMoveStopped();
     void undo();
-    void enableDrawPanel(bool in){drawPanelEnabled=in; }
+    void enableDrawPanel(bool in){drawPanelEnabled=in; update(); }
     void initializeValues();
     void enableBase(bool in){drawBase=in;}
 

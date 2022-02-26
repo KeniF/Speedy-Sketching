@@ -18,7 +18,7 @@ static const GLfloat freehandWidth=3.0f, SCANSIZE=18.0f;
 
 Display::Display(QWidget *parent, int mode):QOpenGLWidget(parent){
     this->mode=mode;
-    //setMouseTracking(true);
+    setMouseTracking(true);
     leftMousePressed=false;
     rightMousePressed=false;
     drawBase=true;

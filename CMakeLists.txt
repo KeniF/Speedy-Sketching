@@ -7,7 +7,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -59,6 +58,34 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
+
+qt_add_resources(Speedy-Sketching "app_images"
+    PREFIX "/"
+    FILES
+        icons/circle.png
+        icons/cone.png
+        icons/copy.png
+        icons/cut.png
+        icons/cylinder_d.png
+        icons/cylinder_t.png
+        icons/downarrow.png
+        icons/extrusion.png
+        icons/filenew.png
+        icons/fileopen.png
+        icons/filesave.png
+        icons/freehand.png
+        icons/help.png
+        icons/paste.png
+        icons/rectangle.png
+        icons/redo.png
+        icons/remove.png
+        icons/sphere.png
+        icons/triangle.png
+        icons/undo.png
+        icons/uparrow.png
+        icons/zoomin.png
+        icons/zoomout.png
+)
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Speedy-Sketching APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
