@@ -28,7 +28,6 @@ HEADERS += mainwindow.h \
     point.h \
     algorithms.h \
     scene.h \
-    object.h \
     shape.h \
     circle.h \
     strokes.h \
