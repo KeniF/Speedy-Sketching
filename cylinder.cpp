@@ -17,7 +17,7 @@ void Cylinder::draw(GLUquadricObj * quadric, bool selected) {
     glRotatef(xRotation,1.0,0.0,0.0);
     glRotatef(yRotation,0.0,1.0,0.0);
     glTranslatef(centre->getX(),centre->getY(),centre->getZ());
-    glRotatef(xRotation,0,0,1.0f);
+    glRotatef(zRotation,0,0,1.0f);
     if(tube){
         glRotatef(90.0f,0,1,0);
         glTranslatef(0,0,length/-2.0f);

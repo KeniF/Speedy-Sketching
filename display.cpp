@@ -325,7 +325,6 @@ void Display::mouseReleaseEvent(QMouseEvent *event){
 void Display::mouseDoubleClickEvent(QMouseEvent *event){
 }
 
-//selects objects
 int Display::selection(){
     int result=-1; //background
     GLuint buffer[BUFFER_SIZE]; //buffer for selection
@@ -375,46 +374,6 @@ void Display::drawStrokes(Strokes * strokes){
                 }while( (tempPt=tempPt->next)!=0);
             glEnd();
         }while((tempLine=tempLine->next)!=0);
-    }
-}
-
-void Display::drawCone(Cone * cone){
-    glRotatef(cone->getXRotation(),1.0,0.0,0.0);
-    glRotatef(cone->getYRotation(),0.0,1.0,0.0);
-    glTranslatef(cone->getCentre()->getX(),cone->getCentre()->getY(),cone->getCentre()->getZ());
-    glRotatef(cone->getZRotation(),0,0,1.0f);
-    glRotatef(-90.0f,1,0,0);
-    gluCylinder(quadric,cone->getBase()/2.0f,0,cone->getHeight(),sliceInCircle,sliceInCircle);
-}
-
-void Display::drawCylinder(Cylinder * cylinder){
-    glRotatef(cylinder->getXRotation(),1.0,0.0,0.0);
-    glRotatef(cylinder->getYRotation(),0.0,1.0,0.0);
-    glTranslatef(cylinder->getCentre()->getX(),cylinder->getCentre()->getY(),cylinder->getCentre()->getZ());
-    glRotatef(cylinder->getZRotation(),0,0,1.0f);
-    if(cylinder->isTube()){
-        glRotatef(90.0f,0,1,0);
-        glTranslatef(0,0,cylinder->getLength()/-2.0f);
-        if(cylinder->drawBase()){
-            glPushMatrix();
-            gluDisk(quadric,0,cylinder->getWidth()/2.0f,sliceInCircle,1);
-            glTranslatef(0,0,cylinder->getLength());
-            gluDisk(quadric,0,cylinder->getWidth()/2.0f,sliceInCircle,1);
-            glPopMatrix();
-        }
-        gluCylinder(quadric,cylinder->getWidth()/2.0f,cylinder->getWidth()/2.0f,cylinder->getLength(),sliceInCircle,sliceInCircle);
-    }
-    else{
-        glRotatef(90.0f,1,0,0);
-        glTranslatef(0,0,cylinder->getWidth()/-2.0f);
-        if(cylinder->drawBase()){
-            glPushMatrix();
-            gluDisk(quadric,0,cylinder->getLength()/2.0f,sliceInCircle,1);
-            glTranslatef(0,0,cylinder->getWidth());
-            gluDisk(quadric,0,cylinder->getLength()/2.0f,sliceInCircle,1);
-            glPopMatrix();
-        }
-        gluCylinder(quadric,cylinder->getLength()/2.0f,cylinder->getLength()/2.0f,cylinder->getWidth(),sliceInCircle,sliceInCircle);
     }
 }
 
