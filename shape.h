@@ -15,7 +15,7 @@ public:
     GLfloat getXRotation(){return xRotation;}
     GLfloat getYRotation(){return yRotation;}
     GLfloat getZRotation(){return zRotation;}
-    virtual void draw(GLUquadricObj * quadric, bool selected);
+    virtual void draw(GLUquadricObj * quadric, bool selected) = 0;
 protected:
     GLfloat height, xRotation, yRotation, zRotation;
 };
