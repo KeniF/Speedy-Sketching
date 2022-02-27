@@ -3,7 +3,6 @@
 #include <iostream>
 #define isnan(x) ((x) != (x))
 
-//using namespace std;
 static const GLfloat PI=3.141592653589793238462f;
 
 Cone * Algorithms::coneDetection(Strokes * pStrokes, GLfloat xRotation,GLfloat yRotation,GLfloat zRotation){

@@ -8,7 +8,6 @@ class Shape
 {
 public:
     Shape(GLfloat xRotation, GLfloat yRotation, GLfloat zRotation);
-    Shape();
     virtual ~Shape();
     void setHeight(GLfloat in){ height=in; }
     GLfloat getHeight(){ return height;}

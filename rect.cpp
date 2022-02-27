@@ -1,11 +1,8 @@
 #include "rect.h"
 
-Rect::Rect(Point * centre, GLfloat width, GLfloat length,GLfloat xRotation, GLfloat yRotation, GLfloat  zRotation)
-        :Shape(xRotation,yRotation,zRotation){
-    this->centre=centre;
-    this->length=length;
-    this->width=width;
-}
+Rect::Rect(Point * centre, GLfloat width, GLfloat length,GLfloat xRotation, GLfloat yRotation, GLfloat zRotation):
+    centre(centre), length(length), width(width), Shape(xRotation,yRotation,zRotation)
+{}
 
 Rect::~Rect(){
     delete centre;

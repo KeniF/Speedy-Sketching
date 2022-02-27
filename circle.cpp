@@ -3,14 +3,12 @@
 #include "shape.h"
 
 using namespace std;
-Circle::Circle(Point * centre, GLfloat radius, GLfloat xRotation, GLfloat yRotation, GLfloat zRotation): Shape(xRotation,yRotation,zRotation){
-    this->centre=centre;
-    this->radius=radius;
-}
+Circle::Circle(Point * centre, GLfloat radius, GLfloat xRotation, GLfloat yRotation, GLfloat zRotation):
+    centre(centre), radius(radius), Shape(xRotation,yRotation,zRotation)
+{}
 
 Circle::~Circle(){
     delete centre;
-    centre=0;
 }
 
 string Circle::toString(){

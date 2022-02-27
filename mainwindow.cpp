@@ -3,7 +3,6 @@
 #include <iostream>
 
 using namespace std;
-//int MainWindow::mode=MainWindow::mode_circle;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow){

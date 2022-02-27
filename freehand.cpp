@@ -1,14 +1,11 @@
 #include "freehand.h"
 
 Freehand::Freehand(bool closed, Line *line, GLfloat xRotation, GLfloat yRotation, GLfloat zRotation):
-        Shape(xRotation,yRotation,zRotation){
-    this->closed=closed;
-    this->line=line;
-}
+        closed(closed), line(line), Shape(xRotation,yRotation,zRotation)
+{}
 
 Freehand::~Freehand(){
     delete line;
-    line=0;
 }
 
 void Freehand::draw(GLUquadricObj *quadric, bool selected) {

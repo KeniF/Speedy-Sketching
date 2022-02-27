@@ -14,9 +14,7 @@ Line::Line(Point *head, GLfloat xRotation,GLfloat yRotation, GLfloat zRotation):
     maxY=head->getY();
 }
 
-Line::Line(){}
-
-Line::Line(const Line & rhs){
+Line::Line(const Line & rhs): Shape(rhs.xRotation, rhs.yRotation, rhs.zRotation) {
     pHead=new Point(*(rhs.pHead));
     Point * from=rhs.pHead;
     Point * to=pHead;

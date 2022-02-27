@@ -17,9 +17,7 @@ static const GLuint sliceInCircle=100, BUFFER_SIZE=2048;
 static const GLfloat zoomInterval=0.2f, panelMoveInterval=0.05f,panelDistance=-30.0f;
 static const GLfloat SCANSIZE=18.0f;
 
-Display::Display(QMainWindow *parent, int mode):QOpenGLWidget(parent){
-    this->mode=mode;
-    this->parent = parent;
+Display::Display(QMainWindow *parent, int mode): mode(mode), parent(parent), QOpenGLWidget(parent){
     setMouseTracking(true);
     leftMousePressed=false;
     rightMousePressed=false;

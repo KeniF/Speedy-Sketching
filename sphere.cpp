@@ -1,14 +1,11 @@
 #include "sphere.h"
 
 Sphere::Sphere(Point * centre, GLfloat radius, GLfloat xRotation, GLfloat yRotation, GLfloat zRotation):
-        Shape(xRotation,yRotation,zRotation){ // sphere, same in all directions
-    this->centre=centre;
-    this->radius=radius;
-}
+    centre(centre), radius(radius), Shape(xRotation,yRotation,zRotation)
+{}
 
 Sphere::~Sphere(){
     delete centre;
-    centre=0;
 }
 void Sphere::draw(GLUquadricObj *quadric, bool selected) {
     if (selected) glColor4f(0.6,0.6,0.9,1.0);

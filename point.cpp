@@ -1,12 +1,8 @@
 #include "point.h"
 
-Point::Point(GLfloat x, GLfloat y, GLfloat z){
-    //cout<<"Point constructor"<<endl;
-    this->x=x;
-    this->y=y;
-    this->z=z;
-    next=0; //important to initialise to 0!!
-}
+Point::Point(GLfloat x, GLfloat y, GLfloat z):
+    x(x), y(y), z(z), next(0)
+{}
 
 Point::Point(const Point & rhs){
     x=rhs.getX();

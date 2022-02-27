@@ -9,7 +9,6 @@ class Line:public Shape
 {
 public:
     Line(Point *head,GLfloat xRotation,GLfloat yRotation,GLfloat zRotation);
-    Line();
     Line(const Line &);
     virtual ~Line();
     void addPoint(Point *point);
