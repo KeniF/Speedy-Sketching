@@ -48,7 +48,6 @@ Cone * Algorithms::coneDetection(Strokes * pStrokes, GLfloat xRotation,GLfloat y
     centre=midPoint(base1,base2);
     delete baseMid;
     delete newTop;
-    delete oldTop;
     delete triangle;
     return new Cone(centre,distBtwPoints(base1,base2),height,xRotation,yRotation,tiltAngle);
 }
