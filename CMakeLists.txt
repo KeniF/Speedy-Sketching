@@ -18,22 +18,37 @@ find_package(Qt6 COMPONENTS OpenGLWidgets REQUIRED)
 find_package(Qt6 COMPONENTS OpenGL REQUIRED)
 
 set(PROJECT_SOURCES
+        algorithms.h
         algorithms.cpp
+        circle.h
         circle.cpp
+        cone.h
         cone.cpp
+        cylinder.h
         cylinder.cpp
+        display.h
         display.cpp
+        freehand.h
         freehand.cpp
+        line.h
         line.cpp
         main.cpp
+        mainwindow.h
         mainwindow.cpp
         mainwindow.ui
+        point.h
         point.cpp
+        rect.h
         rect.cpp
+        scene.h
         scene.cpp
+        shape.h
         shape.cpp
+        sphere.h
         sphere.cpp
+        strokes.h
         strokes.cpp
+        triangle.h
         triangle.cpp
         ui_mainwindow.h
 )
