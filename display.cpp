@@ -323,12 +323,6 @@ void Display::mouseReleaseEvent(QMouseEvent *event){
 }//mouse release event
 
 void Display::mouseDoubleClickEvent(QMouseEvent *event){
-    //mouseReleaseEvent(event);
-    if(pCurrentStrokes){
-        delete pCurrentStrokes;
-        pCurrentStrokes=0;
-    }
-    //cout<<"mouse double click"<<endl;
 }
 
 //selects objects
