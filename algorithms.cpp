@@ -37,6 +37,7 @@ Cone * Algorithms::coneDetection(Strokes * pStrokes, GLfloat xRotation,GLfloat y
     }
     else{
         cout<<"equilateral!?!? WTF!!"<<endl;
+        delete triangle;
         return 0;
     }
     baseMid=midPoint(base1,base2);//delete
@@ -48,6 +49,8 @@ Cone * Algorithms::coneDetection(Strokes * pStrokes, GLfloat xRotation,GLfloat y
     centre=midPoint(base1,base2);
     delete baseMid;
     delete newTop;
+    delete oldTop;
+    delete triangle;
     return new Cone(centre,distBtwPoints(base1,base2),height,xRotation,yRotation,tiltAngle);
 }
 
