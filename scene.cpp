@@ -30,4 +30,11 @@ void Scene::clear() {
   v.clear();
 }
 
-vector<Shape *> Scene::getAll() { return v; }
+void Scene::drawAll(GLUquadricObj *quadric, GLint selectedObject) {
+  for (int i = v.size() - 1; i >= 0; i--) {
+    glPushMatrix();
+    Shape *temp = v[i];
+    glLoadName(i); // needed for picking
+    temp->draw(quadric, i == selectedObject);
+    glPopMatrix();
+  }}

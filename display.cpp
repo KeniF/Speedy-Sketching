@@ -145,14 +145,7 @@ void Display::drawScene(bool drawPanel) {
     drawStrokes(pLastStrokes);
     glPopMatrix();
   }
-  vector<Shape *> sceneObjects = pScene->getAll();
-  for (int i = sceneObjects.size() - 1; i >= 0; i--) {
-    glPushMatrix();
-    Shape *temp = sceneObjects[i];
-    glLoadName(i); // needed for picking
-    temp->draw(quadric, i == selectedObject);
-    glPopMatrix();
-  }
+  pScene->drawAll(quadric, selectedObject);
   if (drawPanelEnabled && drawPanel && mode != MainWindow::mode_delete)
     drawDrawPanel();
 } // drawScene

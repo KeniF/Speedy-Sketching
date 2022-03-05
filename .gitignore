@@ -3,6 +3,10 @@
 build/
 CMakeLists.txt.user
 CMakeCache.txt
+CMakeFiles/
+.rcc/
+cmake_install.cmake
+*_autogen
 *~
 *.autosave
 *.a

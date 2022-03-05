@@ -2,6 +2,9 @@
 #define SCENE_H
 #include <shape.h>
 #include <vector>
+#include "OpenGL/glu.h"
+#include "OpenGL/gl.h"
+
 using namespace std;
 class Scene {
 public:
@@ -11,7 +14,7 @@ public:
   void removeLast();
   void clear();
   Shape *getShape(int index);
-  vector<Shape *> getAll();
+  void drawAll(GLUquadricObj *quadric, GLint selectedObject);
 
 private:
   vector<Shape *> v;
