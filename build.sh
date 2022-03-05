@@ -1,4 +1,4 @@
 #!/bin/bash
 
-qmake SpeedySketching.pro
+cmake CMakeLists.txt
 make all
