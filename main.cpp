@@ -3,10 +3,8 @@
 #include <iostream>
 
 int main(int argc, char *argv[]) {
-  using namespace std;
   QApplication a(argc, argv);
   MainWindow *w = new MainWindow(NULL);
-  w->showMaximized();
-  // w->adjustSliderH();
+  w->showNormal();
   return a.exec();
-} // main
+}

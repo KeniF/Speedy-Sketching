@@ -32,16 +32,11 @@ Line::Line(const Line &rhs)
   maxX = rhs.maxX;
   minY = rhs.minY;
   maxY = rhs.maxY;
-  // cout<<toString().c_str()<<endl;
 }
 
 Line::~Line() {
-  // cout<<"~Line"<<endl;
   delete pHead;
-  pHead = 0;
   delete next;
-  next = 0;
-  pTail = 0;
 }
 
 void Line::addPoint(Point *point) {

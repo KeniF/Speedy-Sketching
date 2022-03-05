@@ -35,7 +35,7 @@ Display::Display(QMainWindow *parent, int mode)
   pExtrudeFrom = 0;
   drawPanelEnabled = true;
   initializeValues();
-} // Display
+}
 
 void Display::initializeValues() {
   drawPanelZoom = 4.5f; // half of length in scene coordinates
@@ -148,11 +148,10 @@ void Display::drawScene(bool drawPanel) {
   pScene->drawAll(quadric, selectedObject);
   if (drawPanelEnabled && drawPanel && mode != MainWindow::mode_delete)
     drawDrawPanel();
-} // drawScene
+}
 
 void Display::mousePressEvent(QMouseEvent *event) {
   statusString = "";
-  // cout<<"mouse press"<<endl;
   if (!rightMousePressed && event->button() == Qt::LeftButton) {
 
     if (isDrawMode() && this->isInDrawPanel()) {
@@ -182,7 +181,7 @@ void Display::mousePressEvent(QMouseEvent *event) {
                                  windowToSceneH(event->y()), 0);
       }
     }
-  } // left mouse
+  }
   if (!leftMousePressed && event->button() == Qt::RightButton) {
     if (pCurrentStrokes) {
       shapeDetection(true); // user triggered
@@ -193,8 +192,8 @@ void Display::mousePressEvent(QMouseEvent *event) {
           new Point(windowToSceneW(event->x()), windowToSceneH(event->y()),
                     0.0f); // z is panel depth
     }
-  } // right mouse
-} // mouse press event
+  }
+}
 
 void Display::mouseMoveEvent(QMouseEvent *event) {
   mouseX = event->x();
@@ -335,20 +334,22 @@ void Display::shapeDetection(bool userTriggered) {
 }
 
 void Display::mouseReleaseEvent(QMouseEvent *event) {
-  // cout<<"mouse release"<<endl;
-  if (event->button() == Qt::LeftButton) {
-    leftMousePressed = false;
-    if (pCurrentStrokes)
-      shapeDetection(false);
-    delete pExtrudeFrom;
-    pExtrudeFrom = 0;
-    extrudedShape = 0;
-  } // left mouse button
-  else if (event->button() == Qt::RightButton) {
-    changeCursor();
-    rightMousePressed = false;
-    delete pDragFrom;
-    pDragFrom = 0;
+  switch (event->button()) {
+    case Qt::LeftButton:
+      leftMousePressed = false;
+      if (pCurrentStrokes)
+        shapeDetection(false);
+      delete pExtrudeFrom;
+      pExtrudeFrom = 0;
+      extrudedShape = 0;
+      break;
+    case Qt::RightButton:
+      changeCursor();
+      rightMousePressed = false;
+      delete pDragFrom;
+      pDragFrom = 0;
+    default:
+      break;
   }
 } // mouse release event
 
@@ -393,10 +394,10 @@ int Display::selection() {
 }
 
 void Display::drawStrokes(Strokes *strokes) {
-  glLoadIdentity();
-  glTranslatef(drawTranslateX, drawTranslateY, -1.0f);
-  glLineWidth(strokeWidth);
   if (strokes) {
+    glLoadIdentity();
+    glTranslatef(drawTranslateX, drawTranslateY, -1.0f);
+    glLineWidth(strokeWidth);
     Line *tempLine = strokes->getHeadLine();
     do {
       glBegin(GL_LINE_STRIP);
@@ -486,8 +487,6 @@ void Display::drawMidLine() {
 }
 
 void Display::clearScene() {
-  // confirm Dialog Yes/No
-  // save scene?
   pScene->clear();
   if (pCurrentStrokes) {
     delete pCurrentStrokes;
@@ -537,7 +536,6 @@ void Display::initializeGL() {
 void Display::xRotation(int deg) {
   if (deg != 0) {
     drawRotateX = originalRotateX + deg;
-    // rotatingX=true;
     update();
   } else
     originalRotateX = drawRotateX;
@@ -546,7 +544,6 @@ void Display::xRotation(int deg) {
 void Display::yRotation(int deg) {
   if (deg != 0) {
     drawRotateY = originalRotateY + deg;
-    // rotatingX=false;
     update();
   } else
     originalRotateY = drawRotateY;
@@ -593,7 +590,6 @@ void Display::panelOut() {
 
 void Display::panelMoveStopped() {
   panelMoving = false;
-  // update();
 }
 
 void Display::undo() {
