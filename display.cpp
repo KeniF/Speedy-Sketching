@@ -230,7 +230,7 @@ void Display::mouseMoveEvent(QMouseEvent *event) {
   } else if (!panelMoving) {
     update();
   }
-} // mouseMoveEvent
+}
 
 void Display::shapeDetection(bool userTriggered) {
   if (pCurrentStrokes && pCurrentStrokes->getTailLine()->getTotalPoints() > 2) {
@@ -323,8 +323,8 @@ void Display::shapeDetection(bool userTriggered) {
       pScene->addObject(pCircle);
       pCurrentStrokes = 0;
       break;
-    } // switch
-  }   // useful line
+    }
+  }
   else {
     if (pCurrentStrokes)
       delete pCurrentStrokes;
@@ -351,14 +351,14 @@ void Display::mouseReleaseEvent(QMouseEvent *event) {
     default:
       break;
   }
-} // mouse release event
+}
 
 void Display::mouseDoubleClickEvent(QMouseEvent *event) {}
 
 int Display::selection() {
-  int result = -1;            // background
-  GLuint buffer[BUFFER_SIZE]; // buffer for selection
-  GLint hits;                 // no. of objects selected
+  int result = -1;
+  GLuint buffer[BUFFER_SIZE];
+  GLint hits;
   GLint viewport[4];
   glViewport((GLsizei)(width / 3.0f + 1.0f), 0,
              (GLsizei)(width / 3.0f * 2.0f - 1), (GLsizei)height);
@@ -388,8 +388,8 @@ int Display::selection() {
         result = buffer[j * 4 + 3];
         depth = buffer[j * 4 + 1];
       }
-    } // find closest object
-  }   // objects found
+    }
+  }
   return result;
 }
 

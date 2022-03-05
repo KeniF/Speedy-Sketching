@@ -33,18 +33,12 @@ MainWindow::~MainWindow() {
   delete actionGroup;
 }
 
-void MainWindow::adjustSliderH() {
-  // ui->horizontalSpacer->changeSize((geometry().width()-60)/3,20,QSizePolicy::Fixed,QSizePolicy::Fixed);
-}
-
 void MainWindow::xRotation(int x) {
   display->xRotation(x * -1);
-  // cout<<"x rotation"<<endl;
 }
 
 void MainWindow::yRotation(int y) {
   display->yRotation(y);
-  // cout<<"y rotation"<<endl;
 }
 
 void MainWindow::resetSliders() {
