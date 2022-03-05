@@ -9,8 +9,8 @@ using namespace std;
 class Scene {
 public:
   Scene();
-  void addObject(Shape *obj);
-  void removeObject(int index);
+  void add(Shape *obj);
+  void remove(int index);
   void removeLast();
   void clear();
   Shape *getShape(int index);

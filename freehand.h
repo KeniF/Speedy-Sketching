@@ -16,7 +16,7 @@ public:
 private:
   bool closed;
   Line *line;
-  constexpr static const GLfloat freehandWidth = 3.0f;
+  constexpr static const GLfloat freehandWidth = 2.0f;
 };
 
 #endif // FREEHAND_H

@@ -166,7 +166,7 @@ void Display::mousePressEvent(QMouseEvent *event) {
     } else if (mode == MainWindow::mode_delete) {
       int result;
       if ((result = selection()) > -1) {
-        pScene->removeObject(result);
+        pScene->remove(result);
         selectedObject = -1;
         update();
       }
@@ -241,7 +241,7 @@ void Display::shapeDetection(bool userTriggered) {
           userTriggered && pCurrentStrokes->getTotalLines() == 1) {
         delete pLastStrokes;
         pLastStrokes = pCurrentStrokes;
-        pScene->addObject(Algorithms::coneDetection(
+        pScene->add(Algorithms::coneDetection(
             pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0));
         pCurrentStrokes = 0;
       }
@@ -254,7 +254,7 @@ void Display::shapeDetection(bool userTriggered) {
       if (pCurrentStrokes->getTotalLines() == 2) {
         delete pLastStrokes;
         pLastStrokes = pCurrentStrokes;
-        pScene->addObject(Algorithms::cylinderDetection(
+        pScene->add(Algorithms::cylinderDetection(
             pCurrentStrokes, false, drawBase, -1.0f * drawRotateX,
             -1.0f * drawRotateY, 0));
         pCurrentStrokes = 0;
@@ -265,7 +265,7 @@ void Display::shapeDetection(bool userTriggered) {
       if (pCurrentStrokes->getTotalLines() == 2) {
         delete pLastStrokes;
         pLastStrokes = pCurrentStrokes;
-        pScene->addObject(Algorithms::cylinderDetection(
+        pScene->add(Algorithms::cylinderDetection(
             pCurrentStrokes, true, drawBase, -1.0f * drawRotateX,
             -1.0f * drawRotateY, 0));
         pCurrentStrokes = 0;
@@ -275,7 +275,7 @@ void Display::shapeDetection(bool userTriggered) {
     case MainWindow::mode_freehand:
       delete pLastStrokes;
       pLastStrokes = pCurrentStrokes;
-      pScene->addObject(Algorithms::freehandDetection(
+      pScene->add(Algorithms::freehandDetection(
           pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0));
       pCurrentStrokes = 0;
       break;
@@ -283,7 +283,7 @@ void Display::shapeDetection(bool userTriggered) {
     case MainWindow::mode_sphere:
       delete pLastStrokes;
       pLastStrokes = pCurrentStrokes;
-      pScene->addObject(Algorithms::sphereDetection(
+      pScene->add(Algorithms::sphereDetection(
           pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0));
       pCurrentStrokes = 0;
       break;
@@ -292,7 +292,7 @@ void Display::shapeDetection(bool userTriggered) {
       if (pCurrentStrokes->getTotalLines() == 2) {
         delete pLastStrokes;
         pLastStrokes = pCurrentStrokes;
-        pScene->addObject(Algorithms::rectangleDetection(
+        pScene->add(Algorithms::rectangleDetection(
             pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0));
         pCurrentStrokes = 0;
       }
@@ -306,7 +306,7 @@ void Display::shapeDetection(bool userTriggered) {
         pLastStrokes = pCurrentStrokes;
         Triangle *pTriangle = Algorithms::triangleDetection(
             pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0);
-        pScene->addObject(pTriangle);
+        pScene->add(pTriangle);
         pCurrentStrokes = 0;
       }
       break;
@@ -320,7 +320,7 @@ void Display::shapeDetection(bool userTriggered) {
           pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY,
           0); // opposite to undo rotation
       // cout<<pCircle->toString()<<endl;
-      pScene->addObject(pCircle);
+      pScene->add(pCircle);
       pCurrentStrokes = 0;
       break;
     }

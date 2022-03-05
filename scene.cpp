@@ -3,12 +3,12 @@
 using namespace std;
 Scene::Scene() {}
 
-void Scene::addObject(Shape *obj) {
+void Scene::add(Shape *obj) {
   if (obj)
     v.push_back(obj);
 }
 
-void Scene::removeObject(int index) {
+void Scene::remove(int index) {
   delete *(v.begin() + index);
   v.erase(v.begin() + index);
 }
