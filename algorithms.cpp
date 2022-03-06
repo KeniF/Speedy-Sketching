@@ -62,6 +62,7 @@ Cylinder *Algorithms::cylinderDetection(Strokes *pStrokes, bool isTube,
                               rect->getLength(), rect->getXRotation(),
                               rect->getYRotation(), rect->getZRotation());
   delete rect; // not needed anymore
+  cout << cy << endl;
   return cy;
 }
 

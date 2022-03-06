@@ -22,6 +22,7 @@ private:
   GLfloat width, length;
   bool tube, hasBase;
   static const GLuint sliceInCircle = 200;
+  void drawCylinder(GLUquadricObj *quadric, float radius, float height);
 };
 
 #endif // CYLINDER_H

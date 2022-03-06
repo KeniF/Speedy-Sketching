@@ -21,27 +21,22 @@ void Cylinder::draw(GLUquadricObj *quadric, bool selected) {
   glRotatef(zRotation, 0, 0, 1.0f);
   if (tube) {
     glRotatef(90.0f, 0, 1, 0);
-    glTranslatef(0, 0, length / -2.0f);
-    if (hasBase) {
-      glPushMatrix();
-      gluDisk(quadric, 0, width / 2.0f, sliceInCircle, 1);
-      glTranslatef(0, 0, length);
-      gluDisk(quadric, 0, width / 2.0f, sliceInCircle, 1);
-      glPopMatrix();
-    }
-    gluCylinder(quadric, width / 2.0f, width / 2.0f, length, sliceInCircle,
-                sliceInCircle);
+    drawCylinder(quadric, width, length);
   } else {
     glRotatef(90.0f, 1, 0, 0);
-    glTranslatef(0, 0, width / -2.0f);
-    if (hasBase) {
-      glPushMatrix();
-      gluDisk(quadric, 0, length / 2.0f, sliceInCircle, 1);
-      glTranslatef(0, 0, width);
-      gluDisk(quadric, 0, length / 2.0f, sliceInCircle, 1);
-      glPopMatrix();
-    }
-    gluCylinder(quadric, length / 2.0f, length / 2.0f, width, sliceInCircle,
-                sliceInCircle);
+    drawCylinder(quadric, length, width);
   }
+}
+
+void Cylinder::drawCylinder(GLUquadricObj *quadric, float radius, float height) {
+  glTranslatef(0, 0, height / -2.0f);
+  if (hasBase) {
+    glPushMatrix();
+    gluDisk(quadric, 0, radius / 2.0f, sliceInCircle, 1);
+    glTranslatef(0, 0, height);
+    gluDisk(quadric, 0, radius / 2.0f, sliceInCircle, 1);
+    glPopMatrix();
+  }
+  gluCylinder(quadric, radius / 2.0f, radius / 2.0f, height, sliceInCircle,
+              sliceInCircle);
 }

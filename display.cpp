@@ -293,14 +293,14 @@ void Display::shapeDetection(bool userTriggered) {
         break;
 
       case Mode::circle:
-          shape = Algorithms::circleDetection(
-            pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0);
-          break;
+        shape = Algorithms::circleDetection(
+          pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0);
+        break;
       default: break;
     }
     if (shape != 0) {
-      moveCurrentStrokesToLast();
       pScene->add(shape);
+      setCurrentStrokesAsLast();
     }
   }
   else {
@@ -311,7 +311,7 @@ void Display::shapeDetection(bool userTriggered) {
   update();
 }
 
-void Display::moveCurrentStrokesToLast() {
+void Display::setCurrentStrokesAsLast() {
   delete pLastStrokes;
   pLastStrokes = pCurrentStrokes;
   pCurrentStrokes = 0;

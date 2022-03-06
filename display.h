@@ -82,7 +82,7 @@ private:
   void drawBoundRect();
   void drawText();
   void drawStrokes(Strokes *strokes);
-  void moveCurrentStrokesToLast();
+  void setCurrentStrokesAsLast();
   bool isDrawMode();
   bool isInDrawPanel();
   int selection();
