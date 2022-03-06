@@ -38,14 +38,14 @@ Cone *Algorithms::coneDetection(Strokes *pStrokes, GLfloat xRotation,
     delete triangle;
     return 0;
   }
-  baseMid = midPoint(base1, base2); // delete
+  baseMid = createAveragePoint({base1, base2}); // delete
   tilt = slope(base1, base2);
   GLfloat tiltAngle = radianToDegree(atan(tilt));
   cout << tiltAngle << endl;
   height = distPointToLine(oldTop, tilt, base2->getX(), base2->getY());
   if (!pointAboveLine(base1, base2, oldTop))
     tiltAngle += 180.0f;
-  centre = midPoint(base1, base2);
+  centre = createAveragePoint({base1, base2});
   delete baseMid;
   delete newTop;
   delete triangle;
@@ -114,13 +114,13 @@ Rect *Algorithms::rectangleDetection(Strokes *pStrokes, GLfloat xRotation,
       // cHead--lHead
       if (distBtwPoints(cHead, lLine->getHeadPoint()) <
           distBtwPoints(cHead, lLine->getTail())) {
-        t1 = midPoint(cHead, lLine->getHeadPoint());
-        t2 = midPoint(cLine->getTail(), lLine->getTail());
+        t1 = createAveragePoint({cHead, lLine->getHeadPoint()});
+        t2 = createAveragePoint({cLine->getTail(), lLine->getTail()});
       }
       // cHead--lTail
       else {
-        t2 = midPoint(cLine->getTail(), lLine->getHeadPoint());
-        t1 = midPoint(cHead, lLine->getTail());
+        t2 = createAveragePoint({cLine->getTail(), lLine->getHeadPoint()});
+        t1 = createAveragePoint({cHead, lLine->getTail()});
       }
       td1 = farPoint(cLine, t1); // diagonal from t1
       td2 = farPoint(cLine, t2); // diagonal from t2
@@ -130,15 +130,15 @@ Rect *Algorithms::rectangleDetection(Strokes *pStrokes, GLfloat xRotation,
       // head-head
       if (distBtwPoints(line1->getHeadPoint(), line2->getHeadPoint()) <
           distBtwPoints(line1->getHeadPoint(), line2->getTail())) {
-        t1 = midPoint(line1->getHeadPoint(), line2->getHeadPoint());
-        td1 = midPoint(line1->getTail(), line2->getTail());
+        t1 = createAveragePoint({line1->getHeadPoint(), line2->getHeadPoint()});
+        td1 = createAveragePoint({line1->getTail(), line2->getTail()});
         t2 = maxPerpDistance(line1->getHeadPoint(), line1->getTail(), line1);
         td2 = maxPerpDistance(line2->getHeadPoint(), line2->getTail(), line2);
       }
       // Head--Tail
       else {
-        t1 = midPoint(line1->getHeadPoint(), line2->getTail());
-        td1 = midPoint(line1->getTail(), line2->getHeadPoint());
+        t1 = createAveragePoint({line1->getHeadPoint(), line2->getTail()});
+        td1 = createAveragePoint({line1->getTail(), line2->getHeadPoint()});
         t2 = maxPerpDistance(line1->getHeadPoint(), line1->getTail(), line1);
         td2 = maxPerpDistance(line2->getHeadPoint(), line2->getTail(), line2);
       }
@@ -199,7 +199,7 @@ Rect *Algorithms::rectangleDetection(Strokes *pStrokes, GLfloat xRotation,
   // cout<<avgSlope<<" "<<angleFromNeutral<<endl;
   if (avgSlope < 0.0f)
     angleFromNeutral = 180.0f - angleFromNeutral;
-  Point *centre = average4Points(t1, t2, td1, td2);
+  Point *centre = createAveragePoint({t1, t2, td1, td2});
   // delete t1;
   // delete t2;
   // delete td1;
@@ -270,7 +270,7 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
                                         GLfloat yRotation, GLfloat zRotation) {
   if (pStrokes->getTotalLines() == 1) {
     Line *line = pStrokes->getHeadLine();
-    Point *p1 = midPoint(line->getHeadPoint(), line->getTail());
+    Point *p1 = createAveragePoint({line->getHeadPoint(), line->getTail()});
     Point *iterator = line->getHeadPoint();
     Point *farPoint = iterator;
     GLfloat maxDistance = 0.0f, temp;
@@ -300,8 +300,8 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
     Line *line2 = line1->next;
     Point *pt1 = line1->getHeadPoint();
     Point *pt2 = line2->getHeadPoint();
-    Point *mp1 = midPoint(pt1, line1->getTail());
-    Point *mp2 = midPoint(pt2, line2->getTail());
+    Point *mp1 = createAveragePoint({pt1, line1->getTail()});
+    Point *mp2 = createAveragePoint({pt2, line2->getTail()});
     GLfloat slope1 = slope(pt1, line1->getTail());
     GLfloat slope2 = slope(pt2, line2->getTail());
     GLfloat totalAngle1 = 0.0f, totalAngle2 = 0.0f, tempSlope;
@@ -344,15 +344,15 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
         maxDistance = temp;
       }
     } while ((iterator = iterator->next));
-    Point *p3 = closestPoint(vLine->getHeadPoint(), otherLine->getHeadPoint(),
-                             otherLine->getTail());
+    Point *p3 =closestPoint({vLine->getHeadPoint(), otherLine->getHeadPoint(),
+                             otherLine->getTail()});
     Point *p13 = 0, *p24 = 0;
     if (p3 == otherLine->getHeadPoint()) {
-      p13 = midPoint(vLine->getHeadPoint(), otherLine->getHeadPoint());
-      p24 = midPoint(vLine->getTail(), otherLine->getTail());
+      p13 = createAveragePoint({vLine->getHeadPoint(), otherLine->getHeadPoint()});
+      p24 = createAveragePoint({vLine->getTail(), otherLine->getTail()});
     } else {
-      p13 = midPoint(vLine->getHeadPoint(), otherLine->getTail());
-      p24 = midPoint(vLine->getTail(), otherLine->getHeadPoint());
+      p13 = createAveragePoint({vLine->getHeadPoint(), otherLine->getTail()});
+      p24 = createAveragePoint({vLine->getTail(), otherLine->getHeadPoint()});
     }
     Point *p1 = new Point(*farPoint);
     return new Triangle(p13, p1, p24, xRotation, yRotation, zRotation);
@@ -363,13 +363,13 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
     Line *lineC = lineB->next;
     // p1(A)-p6(C)
     Point *p6 =
-        closestPoint(lineA->getHeadPoint(), lineB->getHeadPoint(),
-                     lineB->getTail(), lineC->getHeadPoint(), lineC->getTail());
-    Point *p16 = midPoint(lineA->getHeadPoint(), p6);
+       closestPoint({lineA->getHeadPoint(), lineB->getHeadPoint(),
+                     lineB->getTail(), lineC->getHeadPoint(), lineC->getTail()});
+    Point *p16 = createAveragePoint({lineA->getHeadPoint(), p6});
     Point *p3 =
-        closestPoint(lineA->getTail(), lineB->getHeadPoint(), lineB->getTail(),
-                     lineC->getHeadPoint(), lineC->getTail());
-    Point *p23 = midPoint(lineA->getTail(), p3);
+       closestPoint({lineA->getTail(), lineB->getHeadPoint(), lineB->getTail(),
+                     lineC->getHeadPoint(), lineC->getTail()});
+    Point *p23 = createAveragePoint({lineA->getTail(), p3});
     Point *p4, *p5;
     // ABC layout
     if (p6 == lineC->getHeadPoint() || p6 == lineC->getTail()) {
@@ -391,7 +391,7 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
       else
         p4 = lineC->getHeadPoint();
     }
-    Point *p45 = midPoint(p4, p5);
+    Point *p45 = createAveragePoint({p4, p5});
 
     return new Triangle(p16, p23, p45, xRotation, yRotation, zRotation);
   } else
@@ -463,13 +463,6 @@ GLfloat Algorithms::distPointToLine(Point *pt, GLfloat slope, GLfloat x1,
   }
 }
 
-Point *Algorithms::midPoint(Point *p1, Point *p2) {
-  GLfloat x = (p1->getX() + p2->getX()) / 2.0f;
-  GLfloat y = (p1->getY() + p2->getY()) / 2.0f;
-  GLfloat z = (p1->getZ() + p2->getZ()) / 2.0f;
-  return new Point(x, y, z);
-}
-
 Point *Algorithms::averagePoint(Line *pLine) {
   GLfloat sumX = 0.0f, sumY = 0.0f;
   Point *temp = pLine->getHeadPoint();
@@ -481,39 +474,24 @@ Point *Algorithms::averagePoint(Line *pLine) {
                    sumY / (GLfloat)pLine->getTotalPoints(), 0.0);
 }
 
-Point *Algorithms::closestPoint(Point *pt, Point *p1, Point *p2, Point *p3,
-                                Point *p4) {
-  GLfloat d01, d02, d03, d04;
-  d01 = distBtwPoints(pt, p1);
-  d02 = distBtwPoints(pt, p2);
-  d03 = distBtwPoints(pt, p3);
-  d04 = distBtwPoints(pt, p4);
-  Point *pMin = p1;
-  GLfloat vMin = d01;
-  if (d02 < d01) {
-    pMin = p2;
-    vMin = d02;
+Point *Algorithms::closestPoint(std::initializer_list<Point*> points) {
+  if (points.size() < 3) throw std::invalid_argument( "Must be at least 3 points to compare");
+  auto minDist = std::numeric_limits<float>::infinity();
+  Point * closestPoint = 0;
+  Point * firstPoint = 0;
+  for (auto it = std::begin(points); it != std::end(points); ++it) {
+    Point *p = *it;
+    if (firstPoint == 0) {
+      firstPoint = p;
+      continue;
+    }
+    auto dist = distBtwPoints(firstPoint, p);
+    if (minDist > dist) {
+      closestPoint = p;
+      minDist = dist;
+    }
   }
-  if (d03 < vMin) {
-    pMin = p3;
-    vMin = d03;
-  }
-  if (d04 < vMin) {
-    pMin = p4;
-  }
-  return pMin;
-}
-
-Point *Algorithms::closestPoint(Point *pt, Point *p1, Point *p2) {
-  GLfloat d01, d02;
-  d01 = distBtwPoints(pt, p1);
-  d02 = distBtwPoints(pt, p2);
-  Point *pMin = p1;
-  // GLfloat vMin=d01;
-  if (d02 < d01) {
-    pMin = p2;
-  }
-  return pMin;
+  return closestPoint;
 }
 
 // find distance between 2 points
@@ -552,7 +530,7 @@ Line *Algorithms::slideAveraging(Line *line) {
                           line->getZRotation());
   result->addPoint(p2copy);
   do {
-    result->addPoint(average5Points(p1, p2, p3, p4, p5));
+    result->addPoint(createAveragePoint({p1, p2, p3, p4, p5}));
     p1 = p2;
     p2 = p3;
     p3 = p4;
@@ -563,29 +541,15 @@ Line *Algorithms::slideAveraging(Line *line) {
   return result;
 }
 
-Point *Algorithms::average3Points(Point *p1, Point *p2, Point *p3) {
-  GLfloat totalX, totalY, totalZ;
-  totalX = p1->getX() + p2->getX() + p3->getX();
-  totalY = p1->getY() + p2->getY() + p3->getY();
-  totalZ = p1->getZ() + p2->getZ() + p3->getZ();
-  return new Point(totalX / 3.0f, totalY / 3.0f, totalZ / 3.0f);
-}
-
-Point *Algorithms::average4Points(Point *p1, Point *p2, Point *p3, Point *p4) {
-  GLfloat totalX, totalY, totalZ;
-  totalX = p1->getX() + p2->getX() + p3->getX() + p4->getX();
-  totalY = p1->getY() + p2->getY() + p3->getY() + p4->getY();
-  totalZ = p1->getZ() + p2->getZ() + p3->getZ() + p4->getZ();
-  return new Point(totalX / 4.0f, totalY / 4.0f, totalZ / 4.0f);
-}
-
-Point *Algorithms::average5Points(Point *p1, Point *p2, Point *p3, Point *p4,
-                                  Point *p5) {
-  GLfloat totalX, totalY, totalZ;
-  totalX = p1->getX() + p2->getX() + p3->getX() + p4->getX() + p5->getX();
-  totalY = p1->getY() + p2->getY() + p3->getY() + p4->getY() + p5->getY();
-  totalZ = p1->getZ() + p2->getZ() + p3->getZ() + p4->getZ() + p5->getZ();
-  return new Point(totalX / 5.0f, totalY / 5.0f, totalZ / 5.0f);
+Point *Algorithms::createAveragePoint(std::initializer_list<Point*> points) {
+  float totalX = 0, totalY = 0, totalZ = 0;
+  for (auto point : points) {
+    totalX += point->getX();
+    totalY += point->getY();
+    totalZ += point->getZ();
+  }
+  auto size = points.size();
+  return new Point(totalX / size, totalY / size, totalZ / size);
 }
 
 // Angular tolerance algorithm (McMaster 1992)
