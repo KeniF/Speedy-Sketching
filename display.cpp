@@ -19,9 +19,11 @@ static const GLfloat zoomInterval = 0.2f, panelMoveInterval = 0.05f,
                      panelDistance = -30.0f;
 static const GLfloat SCANSIZE = 18.0f;
 
-Display::Display(QMainWindow *parent, int mode)
-    : mode(mode), parent(parent), QOpenGLWidget(parent) {
+
+Display::Display(QMainWindow *parent)
+    : parent(parent), QOpenGLWidget(parent) {
   setMouseTracking(true);
+  mode = Mode::circle;
   leftMousePressed = false;
   rightMousePressed = false;
   drawBase = true;
@@ -146,7 +148,7 @@ void Display::drawScene(bool drawPanel) {
     glPopMatrix();
   }
   pScene->drawAll(quadric, selectedObject);
-  if (drawPanelEnabled && drawPanel && mode != MainWindow::mode_delete)
+  if (drawPanelEnabled && drawPanel && mode != Mode::deleting)
     drawDrawPanel();
 }
 
@@ -163,14 +165,14 @@ void Display::mousePressEvent(QMouseEvent *event) {
         pCurrentStrokes = new Strokes(line);
       else
         pCurrentStrokes->addLine(line);
-    } else if (mode == MainWindow::mode_delete) {
+    } else if (mode == Mode::deleting) {
       int result;
       if ((result = selection()) > -1) {
         pScene->remove(result);
         selectedObject = -1;
         update();
       }
-    } else if (mode == MainWindow::mode_push_pull) {
+    } else if (mode == Mode::push_pull) {
       leftMousePressed = true;
       int result;
       if ((result = selection()) > -1) {
@@ -198,7 +200,7 @@ void Display::mousePressEvent(QMouseEvent *event) {
 void Display::mouseMoveEvent(QMouseEvent *event) {
   mouseX = event->x();
   mouseY = event->y();
-  if (mode == MainWindow::mode_delete || mode == MainWindow::mode_push_pull) {
+  if (mode == Mode::deleting || mode == Mode::push_pull) {
     selectedObject = selection();
   }
   if (leftMousePressed) {
@@ -208,7 +210,7 @@ void Display::mouseMoveEvent(QMouseEvent *event) {
       pCurrentStrokes->getTailLine()->addPoint(p);
       // cout<<p->toString()<<"\n"<<event->x()<<" "<<event->y()<<endl;
       update();
-    } else if (mode == MainWindow::mode_push_pull && extrudedShape) {
+    } else if (mode == Mode::push_pull && extrudedShape) {
       GLfloat height = extrudedShape->getHeight();
       height += (windowToSceneW(event->x()) - pExtrudeFrom->getX());
       if (height < 0.0f)
@@ -220,7 +222,7 @@ void Display::mouseMoveEvent(QMouseEvent *event) {
       pExtrudeFrom =
           new Point(windowToSceneW(event->x()), windowToSceneH(event->y()), 0);
     }
-  } // leftMousePressed
+  }
   else if (rightMousePressed) {
     drawTranslateX += windowToSceneW(event->x()) - pDragFrom->getX();
     drawTranslateY += windowToSceneH(event->y()) - pDragFrom->getY();
@@ -234,95 +236,71 @@ void Display::mouseMoveEvent(QMouseEvent *event) {
 
 void Display::shapeDetection(bool userTriggered) {
   if (pCurrentStrokes && pCurrentStrokes->getTailLine()->getTotalPoints() > 2) {
+    Shape *shape = 0;
     switch (mode) {
-    case MainWindow::mode_cone:
-      if (pCurrentStrokes->getTotalLines() == 3 ||
-          userTriggered && pCurrentStrokes->getTotalLines() == 2 ||
-          userTriggered && pCurrentStrokes->getTotalLines() == 1) {
-        delete pLastStrokes;
-        pLastStrokes = pCurrentStrokes;
-        pScene->add(Algorithms::coneDetection(
-            pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0));
-        pCurrentStrokes = 0;
-      }
-      break;
+      case Mode::cone:
+        if (pCurrentStrokes->getTotalLines() == 3 ||
+            userTriggered && pCurrentStrokes->getTotalLines() == 2 ||
+            userTriggered && pCurrentStrokes->getTotalLines() == 1) {
+          shape = Algorithms::coneDetection(
+                pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0);
+        }
+        break;
 
-    case MainWindow::mode_cube:
-      break;
+      case Mode::cube:
+        break;
 
-    case MainWindow::mode_cylinder_drum:
-      if (pCurrentStrokes->getTotalLines() == 2) {
-        delete pLastStrokes;
-        pLastStrokes = pCurrentStrokes;
-        pScene->add(Algorithms::cylinderDetection(
-            pCurrentStrokes, false, drawBase, -1.0f * drawRotateX,
-            -1.0f * drawRotateY, 0));
-        pCurrentStrokes = 0;
-      }
-      break;
+      case Mode::cylinder_drum:
+        if (pCurrentStrokes->getTotalLines() == 2) {
+          shape = Algorithms::cylinderDetection(
+              pCurrentStrokes, false, drawBase, -1.0f * drawRotateX,
+              -1.0f * drawRotateY, 0);
+        }
+        break;
 
-    case MainWindow::mode_cylinder_tube:
-      if (pCurrentStrokes->getTotalLines() == 2) {
-        delete pLastStrokes;
-        pLastStrokes = pCurrentStrokes;
-        pScene->add(Algorithms::cylinderDetection(
-            pCurrentStrokes, true, drawBase, -1.0f * drawRotateX,
-            -1.0f * drawRotateY, 0));
-        pCurrentStrokes = 0;
-      }
-      break;
+      case Mode::cylinder_tube:
+        if (pCurrentStrokes->getTotalLines() == 2) {
+          shape = Algorithms::cylinderDetection(
+              pCurrentStrokes, true, drawBase, -1.0f * drawRotateX,
+              -1.0f * drawRotateY, 0);
+        }
+        break;
 
-    case MainWindow::mode_freehand:
-      delete pLastStrokes;
-      pLastStrokes = pCurrentStrokes;
-      pScene->add(Algorithms::freehandDetection(
-          pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0));
-      pCurrentStrokes = 0;
-      break;
-
-    case MainWindow::mode_sphere:
-      delete pLastStrokes;
-      pLastStrokes = pCurrentStrokes;
-      pScene->add(Algorithms::sphereDetection(
-          pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0));
-      pCurrentStrokes = 0;
-      break;
-
-    case MainWindow::mode_rectangle:
-      if (pCurrentStrokes->getTotalLines() == 2) {
-        delete pLastStrokes;
-        pLastStrokes = pCurrentStrokes;
-        pScene->add(Algorithms::rectangleDetection(
-            pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0));
-        pCurrentStrokes = 0;
-      }
-      break;
-
-    case MainWindow::mode_triangle:
-      if (pCurrentStrokes->getTotalLines() == 3 ||
-          userTriggered && pCurrentStrokes->getTotalLines() == 2 ||
-          userTriggered && pCurrentStrokes->getTotalLines() == 1) {
-        delete pLastStrokes;
-        pLastStrokes = pCurrentStrokes;
-        Triangle *pTriangle = Algorithms::triangleDetection(
+      case Mode::freehand:
+        shape = Algorithms::freehandDetection(
             pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0);
-        pScene->add(pTriangle);
-        pCurrentStrokes = 0;
-      }
-      break;
+        break;
 
-    case MainWindow::mode_circle:
-      delete pLastStrokes;
-      pLastStrokes = pCurrentStrokes;
-      // pLastStrokes=new
-      // Strokes(Algorithms::angularTolerance(pCurrentStrokes->getTailLine(),triangleTolerance));
-      Circle *pCircle = Algorithms::circleDetection(
-          pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY,
-          0); // opposite to undo rotation
-      // cout<<pCircle->toString()<<endl;
-      pScene->add(pCircle);
-      pCurrentStrokes = 0;
-      break;
+      case Mode::sphere:
+        shape = Algorithms::sphereDetection(
+            pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0);
+        break;
+
+      case Mode::rectangle:
+        if (pCurrentStrokes->getTotalLines() == 2) {
+          shape = Algorithms::rectangleDetection(
+                          pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0);
+        }
+        break;
+
+      case Mode::triangle:
+        if (pCurrentStrokes->getTotalLines() == 3 ||
+            userTriggered && pCurrentStrokes->getTotalLines() == 2 ||
+            userTriggered && pCurrentStrokes->getTotalLines() == 1) {
+            shape = Algorithms::triangleDetection(
+              pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0);
+        }
+        break;
+
+      case Mode::circle:
+          shape = Algorithms::circleDetection(
+            pCurrentStrokes, -1.0f * drawRotateX, -1.0f * drawRotateY, 0);
+          break;
+      default: break;
+    }
+    if (shape != 0) {
+      moveCurrentStrokesToLast();
+      pScene->add(shape);
     }
   }
   else {
@@ -331,6 +309,12 @@ void Display::shapeDetection(bool userTriggered) {
     pCurrentStrokes = 0;
   }
   update();
+}
+
+void Display::moveCurrentStrokesToLast() {
+  delete pLastStrokes;
+  pLastStrokes = pCurrentStrokes;
+  pCurrentStrokes = 0;
 }
 
 void Display::mouseReleaseEvent(QMouseEvent *event) {
@@ -509,7 +493,7 @@ void Display::resizeGL(int width, int height) {
   this->height = height * parent->devicePixelRatio();
 }
 
-void Display::modeChanged(int mode) {
+void Display::modeChanged(Mode mode) {
   if (pLastStrokes)
     delete pLastStrokes;
   pLastStrokes = pCurrentStrokes;
@@ -519,7 +503,7 @@ void Display::modeChanged(int mode) {
 }
 
 bool Display::isDrawMode() {
-  if (mode < MainWindow::mode_push_pull)
+  if (mode < Mode::push_pull)
     return true;
   else
     return false;
@@ -605,7 +589,7 @@ void Display::undo() {
 void Display::changeCursor() {
   if (isDrawMode()) {
     setCursor(Qt::CrossCursor);
-  } else if (mode == MainWindow::mode_delete) {
+  } else if (mode == Mode::deleting) {
     setCursor(Qt::ArrowCursor);
   }
 }

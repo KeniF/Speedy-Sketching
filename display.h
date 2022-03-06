@@ -20,8 +20,13 @@
 class Display : public QOpenGLWidget {
   Q_OBJECT
 public:
-  Display(QMainWindow *parent, int mode);
+  Display(QMainWindow *parent);
   ~Display();
+
+  enum class Mode { freehand = 1, circle = 6, triangle = 11,
+                    rectangle = 16, cone = 21, cube = 26,
+                    cylinder_tube = 31, cylinder_drum = 36,
+                    sphere = 41, push_pull = 46, deleting = 51 };
   void zoomIn();
   void zoomOut();
   void panelIn();
@@ -29,7 +34,7 @@ public:
   void clearScene();
   void xRotation(int deg);
   void yRotation(int deg);
-  void modeChanged(int mode);
+  void modeChanged(Mode mode);
   void panelMoveStopped();
   void undo();
   void enableDrawPanel(bool in) {
@@ -38,6 +43,7 @@ public:
   }
   void initializeValues();
   void enableBase(bool in) { drawBase = in; }
+
 
 protected:
   void initializeGL();
@@ -59,7 +65,8 @@ private:
       drawPanelZoom, // bigger number=zoom out
       width, height, drawTranslateX, drawTranslateY,
       drawTranslateZ; // drawTranslateZ=panel depth
-  GLint mode, drawRotateX, drawRotateY, originalRotateX, originalRotateY,
+  Display::Mode mode;
+  GLint drawRotateX, drawRotateY, originalRotateX, originalRotateY,
       selectedObject;
   GLuint mouseX, mouseY;
   Scene *pScene;
@@ -75,6 +82,7 @@ private:
   void drawBoundRect();
   void drawText();
   void drawStrokes(Strokes *strokes);
+  void moveCurrentStrokesToLast();
   bool isDrawMode();
   bool isInDrawPanel();
   int selection();

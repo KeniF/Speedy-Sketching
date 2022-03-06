@@ -7,7 +7,7 @@ using namespace std;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  display = new Display(this, MainWindow::mode_circle);
+  display = new Display(this);
   display->setCursor(Qt::CrossCursor);
   ui->gridLayout->addWidget(display, 0, 0, 1, 1); // OpenGL window
   // Set action group so only one can be pressed at a time
@@ -48,61 +48,61 @@ void MainWindow::resetSliders() {
 void MainWindow::on_actionSphere_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_sphere);
+  display->modeChanged(Display::Mode::sphere);
 }
 
 void MainWindow::on_actionCircle_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_circle);
+  display->modeChanged(Display::Mode::circle);
 }
 
 void MainWindow::on_actionFreehand_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_freehand);
+  display->modeChanged(Display::Mode::freehand);
 }
 
 void MainWindow::on_actionTriangle_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_triangle);
+  display->modeChanged(Display::Mode::triangle);
 }
 
 void MainWindow::on_actionCone_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_cone);
+  display->modeChanged(Display::Mode::cone);
 }
 
 void MainWindow::on_actionCube_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_cube);
+  display->modeChanged(Display::Mode::cube);
 }
 
 void MainWindow::on_actionCylinder_tube_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_cylinder_tube);
+  display->modeChanged(Display::Mode::cylinder_tube);
 }
 
 void MainWindow::on_actionCylinder_drum_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_cylinder_drum);
+  display->modeChanged(Display::Mode::cylinder_drum);
 }
 
 void MainWindow::on_actionPush_pull_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_push_pull);
+  display->modeChanged(Display::Mode::push_pull);
 }
 
 void MainWindow::on_actionSquare_triggered() {
   ui->inButton->setEnabled(true);
   ui->outButton->setEnabled(true);
-  display->modeChanged(mode_rectangle);
+  display->modeChanged(Display::Mode::rectangle);
 }
 
 void MainWindow::zoomIn() {
@@ -127,7 +127,7 @@ void MainWindow::on_outButton_released() { display->panelMoveStopped(); }
 void MainWindow::on_actionDelete_triggered() {
   ui->inButton->setEnabled(false);
   ui->outButton->setEnabled(false);
-  display->modeChanged(mode_delete);
+  display->modeChanged(Display::Mode::deleting);
 }
 
 void MainWindow::on_actionUndo_triggered() { display->undo(); }

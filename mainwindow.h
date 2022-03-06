@@ -15,10 +15,6 @@ public:
   MainWindow(QWidget *parent = 0);
   ~MainWindow();
   Display *display;
-  static const int mode_freehand = 1, mode_circle = 6, mode_triangle = 11,
-                   mode_rectangle = 16, mode_cone = 21, mode_cube = 26,
-                   mode_cylinder_tube = 31, mode_cylinder_drum = 36,
-                   mode_sphere = 41, mode_push_pull = 46, mode_delete = 51;
 
 private:
   Ui::MainWindow *ui;
