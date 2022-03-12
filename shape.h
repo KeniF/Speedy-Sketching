@@ -16,7 +16,7 @@ public:
   virtual void draw(GLUquadricObj *quadric, bool selected) = 0;
 
 protected:
-  GLfloat height, xRotation, yRotation, zRotation;
+  GLfloat height = 0.0f, xRotation, yRotation, zRotation;
 };
 
 #endif // SHAPE_H

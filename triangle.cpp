@@ -23,7 +23,7 @@ void Triangle::draw(GLUquadricObj *quadric, bool selected) {
     glBegin(GL_POLYGON);
     glVertex3f(pPoint1->getX(), pPoint1->getY(), pPoint1->getZ());
     glVertex3f(pPoint2->getX(), pPoint2->getY(), pPoint2->getZ());
-    glVertex3f(pPoint2->getX(), pPoint3->getY(), pPoint3->getZ());
+    glVertex3f(pPoint3->getX(), pPoint3->getY(), pPoint3->getZ());
     glEnd();
   } else {
     glBegin(GL_POLYGON);
