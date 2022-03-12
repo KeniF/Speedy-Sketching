@@ -61,8 +61,7 @@ Cylinder *Algorithms::cylinderDetection(Strokes *pStrokes, bool isTube,
   Cylinder *cy = new Cylinder(isTube, hasBase, newCentre, rect->getWidth(),
                               rect->getLength(), rect->getXRotation(),
                               rect->getYRotation(), rect->getZRotation());
-  delete rect; // not needed anymore
-  cout << cy << endl;
+  delete rect;
   return cy;
 }
 
@@ -255,11 +254,7 @@ GLfloat Algorithms::angleBtwLines(GLfloat slope1, GLfloat slope2) {
   } else if (isinf(slope2)) {
     angle = 90.0f - radianToDegree(atan(slope1));
   } else {
-    GLfloat difference;
-    if (slope1 < slope2)
-      difference = slope2 - slope1;
-    else
-      difference = slope1 - slope2;
+    GLfloat difference = abs(slope1 - slope2);
     // cout<<slope1<<" "<<slope2<<" "<<difference<<endl;
     angle = abs(radianToDegree(atan(difference / (1.0f + slope1 * slope2))));
   }
@@ -494,11 +489,8 @@ Point *Algorithms::closestPoint(std::initializer_list<Point*> points) {
   return closestPoint;
 }
 
-// find distance between 2 points
 GLfloat Algorithms::distBtwPoints(Point *a, Point *b) {
-  GLfloat tempXSqd = pow((a->getX() - b->getX()), 2);
-  GLfloat tempYSqd = pow((a->getY() - b->getY()), 2);
-  return sqrt(tempXSqd + tempYSqd);
+  return hypot((a->getX() - b->getX()), (a->getY() - b->getY()));
 }
 
 Line *Algorithms::slideAveraging(Line *line, int iterations) {
