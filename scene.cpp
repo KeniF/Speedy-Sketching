@@ -21,7 +21,7 @@ void Scene::removeLast() {
 }
 
 Shape *Scene::getShape(int index) {
-  return static_cast<Shape *>(*(v.begin() + index));
+  return *(v.begin() + index);
 }
 
 void Scene::clear() {
