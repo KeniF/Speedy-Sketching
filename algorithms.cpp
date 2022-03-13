@@ -469,17 +469,15 @@ Point *Algorithms::averagePoint(Line *pLine) {
                    sumY / (GLfloat)pLine->getTotalPoints(), 0.0);
 }
 
+// Closest point to the first in the initializer_list
 Point *Algorithms::closestPoint(std::initializer_list<Point*> points) {
   if (points.size() < 3) throw std::invalid_argument( "Must be at least 3 points to compare");
   auto minDist = std::numeric_limits<float>::infinity();
   Point * closestPoint = 0;
-  Point * firstPoint = 0;
-  for (auto it = std::begin(points); it != std::end(points); ++it) {
+  auto first = std::begin(points);
+  Point * firstPoint = *first;
+  for (auto it = first + 1; it != std::end(points); ++it) {
     Point *p = *it;
-    if (firstPoint == 0) {
-      firstPoint = p;
-      continue;
-    }
     auto dist = distBtwPoints(firstPoint, p);
     if (minDist > dist) {
       closestPoint = p;
