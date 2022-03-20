@@ -8,21 +8,20 @@ using namespace std;
 class Point {
 public:
   Point(GLfloat x, GLfloat y, GLfloat z);
-  // Point();
   Point(const Point &);
   ~Point();
   void setNext(Point *next) { this->next = next; }
-  Point *getNext(Point *next) { return this->next; }
-  Point *getLast(Point *last) { return this->last; }
+  Point *getNext() { return this->next; }
+  Point *getLast() { return this->last; }
   void setLast(Point *last) { this->last = last; }
   GLfloat getX() const { return x; }
   GLfloat getY() const { return y; }
   GLfloat getZ() const { return z; }
-  Point *next, *last;
   string toString();
 
 private:
   GLfloat x, y, z;
+  Point *next, *last;
 };
 
 #endif // POINT_H

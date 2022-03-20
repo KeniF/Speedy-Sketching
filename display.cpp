@@ -388,9 +388,9 @@ void Display::drawStrokes(Strokes *strokes) {
       Point *tempPt = tempLine->getHeadPoint();
       do {
         glVertex3f(tempPt->getX(), tempPt->getY(), 0.0f);
-      } while ((tempPt = tempPt->next) != 0);
+      } while ((tempPt = tempPt->getNext()) != 0);
       glEnd();
-    } while ((tempLine = tempLine->next) != 0);
+    } while ((tempLine = tempLine->getNext()) != 0);
   }
 }
 

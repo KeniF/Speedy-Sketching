@@ -19,11 +19,13 @@ public:
   GLfloat getMaxX() { return maxX; }
   GLfloat getMinY() { return minY; }
   GLfloat getMaxY() { return maxY; }
-  Line *next;
+  Line* getNext() { return next; }
+  void setNext(Line* line) { next = line; }
   void draw(GLUquadricObj *quadric, bool selected);
 
 private:
   Point *pHead, *pTail;
+  Line *next;
   int totalPoints;
   GLfloat minX, maxX, minY, maxY;
 };

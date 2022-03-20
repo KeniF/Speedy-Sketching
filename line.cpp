@@ -21,10 +21,10 @@ Line::Line(const Line &rhs)
   Point *to = pHead;
   Point *tail = pHead;
   totalPoints = rhs.totalPoints;
-  while ((from = from->next)) {
+  while ((from = from->getNext())) {
     to = new Point(*from);
-    tail->next = to;
-    to->last = tail;
+    tail->setNext(to);
+    to->setLast(tail);
     tail = to;
   }
   pTail = rhs.pTail;
@@ -40,7 +40,7 @@ Line::~Line() {
 }
 
 void Line::addPoint(Point *point) {
-  pTail->next = point;
+  pTail->setNext(point);
   if (point->getX() < minX)
     minX = point->getX();
   if (point->getX() > maxX)
@@ -59,7 +59,7 @@ string Line::toString() {
   Point *iterator = this->getHeadPoint();
   do {
     stream << iterator->toString();
-  } while ((iterator = iterator->next));
+  } while ((iterator = iterator->getNext()));
   return stream.str();
 }
 

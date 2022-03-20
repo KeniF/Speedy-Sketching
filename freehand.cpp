@@ -19,6 +19,6 @@ void Freehand::draw(GLUquadricObj *quadric, bool selected) {
   Point *tempPt = line->getHeadPoint();
   do {
     glVertex3f(tempPt->getX(), tempPt->getY(), tempPt->getZ());
-  } while ((tempPt = tempPt->next) != 0);
+  } while ((tempPt = tempPt->getNext()) != 0);
   glEnd();
 }

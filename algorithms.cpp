@@ -72,7 +72,7 @@ Rect *Algorithms::rectangleDetection(Strokes *pStrokes, GLfloat xRotation,
     return 0;
   else if (pStrokes->getTotalLines() == 2) {
     Line *line1 = pStrokes->getHeadLine();
-    Line *line2 = line1->next;
+    Line *line2 = line1->getNext();
     GLfloat slope1 = slope(line1->getHeadPoint(), line1->getTail());
     GLfloat slope2 = slope(line2->getHeadPoint(), line2->getTail());
     GLfloat totalAngle1 = 0.0f;
@@ -80,14 +80,14 @@ Rect *Algorithms::rectangleDetection(Strokes *pStrokes, GLfloat xRotation,
     GLfloat tempSlope = 0.0f;
     Point *iterator = line1->getHeadPoint();
     int noOfPoints1 = 0, noOfPoints2 = 0;
-    while ((iterator = iterator->next)) {
+    while ((iterator = iterator->getNext())) {
       tempSlope = slope(line1->getHeadPoint(), iterator);
       if (!isinf(tempSlope) && !isnan(tempSlope))
         totalAngle1 += angleBtwLines(slope1, tempSlope);
       noOfPoints1++;
     }
     iterator = line2->getHeadPoint();
-    while ((iterator = iterator->next)) {
+    while ((iterator = iterator->getNext())) {
       tempSlope = slope(line2->getHeadPoint(), iterator);
       if (!isinf(tempSlope) && !isnan(tempSlope))
         totalAngle2 += angleBtwLines(slope2, tempSlope);
@@ -225,7 +225,7 @@ Circle *Algorithms::circleDetection(Strokes *pStrokes, GLfloat xRotation,
   Point *pTempPt = pLine->getHeadPoint();
   do
     total += distBtwPoints(pTempPt, pAvg);
-  while ((pTempPt = pTempPt->next));
+  while ((pTempPt = pTempPt->getNext()));
   GLfloat avgRadius = total / (GLfloat)pLine->getTotalPoints();
   return new Circle(pAvg, avgRadius, xRotation, yRotation, zRotation);
 }
@@ -240,7 +240,7 @@ Sphere *Algorithms::sphereDetection(Strokes *pStrokes, GLfloat xRotation,
   Point *pTempPt = pLine->getHeadPoint();
   do
     total += distBtwPoints(pTempPt, pAvg);
-  while ((pTempPt = pTempPt->next));
+  while ((pTempPt = pTempPt->getNext()));
   GLfloat avgRadius = total / (GLfloat)pLine->getTotalPoints();
   return new Sphere(pAvg, avgRadius, xRotation, yRotation, zRotation);
 }
@@ -269,7 +269,7 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
     Point *iterator = line->getHeadPoint();
     Point *farPoint = iterator;
     GLfloat maxDistance = 0.0f, temp;
-    while ((iterator = iterator->next)) {
+    while ((iterator = iterator->getNext())) {
       if (maxDistance < (temp = distBtwPoints(iterator, p1))) {
         maxDistance = temp;
         farPoint = iterator;
@@ -281,7 +281,7 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
     GLfloat y1 = p2->getY();
     maxDistance = 0.0f;
     iterator = line->getHeadPoint();
-    while ((iterator = iterator->next)) {
+    while ((iterator = iterator->getNext())) {
       if (maxDistance <
           (temp = distPointToLine(iterator, slopeOfLine, x1, y1))) {
         farPoint = iterator;
@@ -292,7 +292,7 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
                         zRotation);
   } else if (pStrokes->getTotalLines() == 2) {
     Line *line1 = pStrokes->getHeadLine();
-    Line *line2 = line1->next;
+    Line *line2 = line1->getNext();
     Point *pt1 = line1->getHeadPoint();
     Point *pt2 = line2->getHeadPoint();
     Point *mp1 = createAveragePoint({pt1, line1->getTail()});
@@ -300,12 +300,12 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
     GLfloat slope1 = slope(pt1, line1->getTail());
     GLfloat slope2 = slope(pt2, line2->getTail());
     GLfloat totalAngle1 = 0.0f, totalAngle2 = 0.0f, tempSlope;
-    while ((pt1 = pt1->next)) {
+    while ((pt1 = pt1->getNext())) {
       tempSlope = slope(mp1, pt1);
       totalAngle1 += angleBtwLines(slope1, tempSlope);
     }
     delete mp1;
-    while ((pt2 = pt2->next)) {
+    while ((pt2 = pt2->getNext())) {
       tempSlope = slope(mp2, pt2);
       totalAngle2 += angleBtwLines(slope2, tempSlope);
     }
@@ -338,7 +338,7 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
         farPoint = iterator;
         maxDistance = temp;
       }
-    } while ((iterator = iterator->next));
+    } while ((iterator = iterator->getNext()));
     Point *p3 =closestPoint({vLine->getHeadPoint(), otherLine->getHeadPoint(),
                              otherLine->getTail()});
     Point *p13 = 0, *p24 = 0;
@@ -354,8 +354,8 @@ Triangle *Algorithms::triangleDetection(Strokes *pStrokes, GLfloat xRotation,
   } else if (pStrokes->getTotalLines() ==
              3) { // Line A(1,2) Line B(3,4), Line C(5,6)
     Line *lineA = pStrokes->getHeadLine();
-    Line *lineB = lineA->next;
-    Line *lineC = lineB->next;
+    Line *lineB = lineA->getNext();
+    Line *lineC = lineB->getNext();
     // p1(A)-p6(C)
     Point *p6 =
        closestPoint({lineA->getHeadPoint(), lineB->getHeadPoint(),
@@ -416,7 +416,7 @@ Point *Algorithms::farPoint(Line *line, Point *point) {
       farPoint = iterator;
       maxDistance = temp;
     }
-  } while ((iterator = iterator->next));
+  } while ((iterator = iterator->getNext()));
   return farPoint;
 }
 
@@ -432,7 +432,7 @@ Point *Algorithms::maxPerpDistance(Point *head, Point *tail, Line *curve) {
         farPoint = iterator;
         maxDistance = temp;
       }
-    } while ((iterator = iterator->next));
+    } while ((iterator = iterator->getNext()));
   } else {
     do {
       if (maxDistance <
@@ -442,7 +442,7 @@ Point *Algorithms::maxPerpDistance(Point *head, Point *tail, Line *curve) {
         // cout<<"max dis"<<maxDistance<<endl;
       }
       // cout<<"distance "<<temp<<endl;
-    } while ((iterator = iterator->next));
+    } while ((iterator = iterator->getNext()));
   }
   return farPoint;
 } // maxPerpDistance
@@ -464,7 +464,7 @@ Point *Algorithms::averagePoint(Line *pLine) {
   do {
     sumX += temp->getX();
     sumY += temp->getY();
-  } while ((temp = temp->next) != 0);
+  } while ((temp = temp->getNext()) != 0);
   return new Point(sumX / (GLfloat)pLine->getTotalPoints(),
                    sumY / (GLfloat)pLine->getTotalPoints(), 0.0);
 }
@@ -510,10 +510,10 @@ Line *Algorithms::slideAveraging(Line *line) {
     return new Line(*line);
   Point *p1, *p2, *p3, *p4, *p5;
   p1 = line->getHeadPoint();
-  p2 = p1->next;
-  p3 = p2->next;
-  p4 = p3->next;
-  p5 = p4->next;
+  p2 = p1->getNext();
+  p3 = p2->getNext();
+  p4 = p3->getNext();
+  p5 = p4->getNext();
   Point *p1copy = new Point(*p1);
   Point *p2copy = new Point(*p2);
   Line *result = new Line(p1copy, line->getXRotation(), line->getYRotation(),
@@ -525,9 +525,9 @@ Line *Algorithms::slideAveraging(Line *line) {
     p2 = p3;
     p3 = p4;
     p4 = p5;
-  } while ((p5 = p5->next));
+  } while ((p5 = p5->getNext()));
   result->addPoint(new Point(*p3));
-  result->addPoint(new Point(*(p3->next)));
+  result->addPoint(new Point(*(p3->getNext())));
   return result;
 }
 
@@ -554,8 +554,8 @@ Line *Algorithms::angularTolerance(Line *line, GLfloat tolerance) {
                   line->getHeadPoint()->getZ()),
         line->getXRotation(), line->getYRotation(), line->getZRotation());
     Point *p1 = line->getHeadPoint();
-    Point *p2 = p1->next;
-    Point *p3 = p2->next;
+    Point *p2 = p1->getNext();
+    Point *p3 = p2->getNext();
     do {
       GLfloat slope1 = slope(p1, p2);
       GLfloat slope2 = slope(p1, p3);
@@ -576,9 +576,9 @@ Line *Algorithms::angularTolerance(Line *line, GLfloat tolerance) {
       }
       if (angle > tolerance)
         final->addPoint(new Point(*p2)); // keep p2
-      p1 = p1->next;
-      p2 = p2->next;
-      p3 = p3->next;
+      p1 = p1->getNext();
+      p2 = p2->getNext();
+      p3 = p3->getNext();
     } while (p3); // has next
     final->addPoint(new Point(*p2));
     cout << final->getTotalPoints() << endl;

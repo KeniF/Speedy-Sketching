@@ -9,7 +9,7 @@ Strokes::~Strokes() {
 }
 
 void Strokes::addLine(Line *line) {
-  pTailLine->next = line;
+  pTailLine->setNext(line);
   pTailLine = line;
   noOfLines++;
 }
