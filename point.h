@@ -21,7 +21,7 @@ public:
 
 private:
   GLfloat x, y, z;
-  Point *next, *last;
+  Point *next = 0, *last = 0;
 };
 
 #endif // POINT_H

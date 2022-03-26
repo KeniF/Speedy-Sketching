@@ -1,9 +1,9 @@
 #include "point.h"
 
-Point::Point(GLfloat x, GLfloat y, GLfloat z) : x(x), y(y), z(z), next(0) {}
+Point::Point(GLfloat x, GLfloat y, GLfloat z) : x(x), y(y), z(z) {}
 
 Point::Point(const Point &rhs):
-  x(rhs.x), y(rhs.y), z(rhs.z), next(rhs.next), last(rhs.last)  {
+  x(rhs.x), y(rhs.y), z(rhs.z) {
 }
 
 Point::~Point() {
