@@ -567,10 +567,7 @@ Line *Algorithms::angularTolerance(Line *line, GLfloat tolerance) {
       } else if (isinf(slope2)) {
         angle = 90.0f - radianToDegree(atan(slope1));
       } else {
-        if (slope1 < slope2)
-          difference = slope2 - slope1;
-        else
-          difference = slope1 - slope2;
+        difference = abs(slope2 - slope1);
         angle =
             abs(radianToDegree(atan(difference / (1.0f + slope1 * slope2))));
       }
